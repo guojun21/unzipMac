@@ -1,6 +1,89 @@
-# 04-animation-specs.md - 动画规范与参数
+# 主要内容预览
 
 ## 一、动画设计原则
+- 核心理念（功能性、反馈、引导）
+- 设计准则（自然物理性、目的性、克制高效）
+- 流体科技关联
+
+## 二、动画时长规范
+- 标准时长系统（100ms-700ms）
+- 时长使用场景
+- 时长决策树
+
+## 三、缓动函数 (Easing)
+- 标准缓动曲线
+- 流体力学缓动
+- 缓动选择指南
+
+## 四、无界动画系统
+- 光晕扩散动画
+- 水滴晕染动画
+- 渐变消融动画
+- 边缘柔化过渡
+
+## 五、流体特效动画
+- 液体流动效果
+- 粒子系统
+- 波纹扩散
+- 呼吸式脉冲
+
+## 六、常见动画类型
+- 淡入淡出、滑动、缩放、旋转、弹跳
+
+## 七、组件动画规范
+- 按钮、卡片、模态框、下拉菜单、通知、侧边栏
+
+## 八、微交互动画
+- 复选框、开关、输入框、点赞、数字变化
+
+## 九、加载动画
+- 旋转加载器、脉冲、骨架屏、进度条
+
+## 十、页面过渡动画
+- 路由切换、列表交错、视差滚动
+
+## 十一、性能优化
+- Transform优化、will-change、减少重排
+
+## 十二、辅助功能考虑
+- prefers-reduced-motion、暂停控制
+
+## 十三、动画库推荐
+- Framer Motion、GSAP、Anime.js
+
+## 十四、调试工具与检查清单
+
+---
+
+# 动画规范与参数
+
+**版本**: v1.0  
+**设计理念**: 流体科技 (Fluid Technology)  
+**更新日期**: 2025-11-01
+
+---
+
+## 一、动画设计原则
+
+### 与设计总概念的关联
+
+本动画系统基于 **00-design-concept.md** 中的核心理念：
+
+```
+流体科技 (Fluid Technology)
+  ↓
+动效哲学：流体力学
+  ↓
+三大原则：惯性与阻尼 + 连续性 + 呼应性
+  ↓
+无界 (Borderless)
+  ↓
+光晕扩散 + 水滴晕染 + 边缘消融
+```
+
+**核心隐喻**：动画应该像**水流**一样自然流畅，而非机械齿轮的转动。
+
+---
 
 ### 1.1 核心理念
 
@@ -110,10 +193,34 @@
 --ease-in: cubic-bezier(0.4, 0, 1, 1);              /* 加速 - 元素离开 */
 --ease-linear: linear;                               /* 线性 - 持续动画 */
 
-/* 品牌专用缓动 */
---ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);   /* 弹性 - 有趣交互 */
---ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);    /* 流畅 - 滚动动画 */
---ease-sharp: cubic-bezier(0.4, 0, 0.6, 1);         /* 锐利 - 快速变化 */
+/* 流体科技专用缓动 */
+--ease-fluid: cubic-bezier(0.34, 1.56, 0.64, 1);    /* 流体弹性 - 水滴弹跳 */
+--ease-liquid: cubic-bezier(0.25, 0.1, 0.25, 1);    /* 液体流动 - 平滑过渡 */
+--ease-wave: cubic-bezier(0.36, 0, 0.66, -0.56);    /* 波浪起伏 - 往复动画 */
+--ease-spring: cubic-bezier(0.68, -0.55, 0.265, 1.55); /* 弹簧 - 强调反馈 */
+```
+
+### 3.1.1 流体力学缓动说明
+
+**流体弹性 (Fluid)**
+```
+模拟：水滴落在表面的弹跳
+特点：超出目标后回弹，像液体的表面张力
+用于：按钮点击、成功提示、愉悦反馈
+```
+
+**液体流动 (Liquid)**
+```
+模拟：液体倾倒的连续流动
+特点：开始快、中间平稳、结尾渐缓
+用于：页面过渡、内容滚动、平滑展开
+```
+
+**波浪起伏 (Wave)**
+```
+模拟：水波的起伏节奏
+特点：周期性起伏，自然律动
+用于：呼吸动画、脉冲效果、引导提示
 ```
 
 ### 3.2 缓动函数对比
@@ -242,7 +349,431 @@ cubic-bezier(0.34, 1.56, 0.64, 1)
 
 ---
 
-## 四、常见动画类型
+## 四、无界动画系统 (Borderless Animations)
+
+### 核心理念
+
+基于 **"无界"设计语言**，动画不应该有生硬的开始和结束，而应该像**水滴晕染**一样自然扩散。
+
+### 4.1 光晕扩散动画 (Glow Diffusion)
+
+**效果**：元素出现时，光晕从中心向外扩散，逐渐消散
+
+```css
+@keyframes glowDiffusion {
+    0% {
+        box-shadow: 
+            0 0 0 0 rgba(6, 182, 212, 0.6),
+            0 0 0 0 rgba(6, 182, 212, 0);
+    }
+    50% {
+        box-shadow: 
+            0 0 20px 10px rgba(6, 182, 212, 0.4),
+            0 0 40px 20px rgba(6, 182, 212, 0.2);
+    }
+    100% {
+        box-shadow: 
+            0 0 20px 0 rgba(6, 182, 212, 0.3),
+            0 0 40px 0 rgba(6, 182, 212, 0.1);
+    }
+}
+
+.element-appear {
+    animation: glowDiffusion 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+```
+
+**使用场景**：主按钮出现、重要提示、激活状态
+
+---
+
+### 4.2 水滴晕染动画 (Droplet Bleeding)
+
+**效果**：颜色像水滴滴在纸上一样，从中心向外晕染
+
+```css
+@keyframes dropletBleeding {
+    0% {
+        background: 
+            radial-gradient(
+                circle at center,
+                rgba(6, 182, 212, 0.8) 0%,
+                rgba(6, 182, 212, 0) 0%
+            );
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    50% {
+        background: 
+            radial-gradient(
+                circle at center,
+                rgba(6, 182, 212, 0.6) 30%,
+                rgba(6, 182, 212, 0.2) 60%,
+                rgba(6, 182, 212, 0) 100%
+            );
+        transform: scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        background: 
+            radial-gradient(
+                circle at center,
+                rgba(6, 182, 212, 0.5) 40%,
+                rgba(6, 182, 212, 0.15) 70%,
+                rgba(6, 182, 212, 0) 100%
+            );
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.droplet-enter {
+    animation: dropletBleeding 800ms cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+```
+
+**使用场景**：卡片出现、模态框背景、选中状态
+
+---
+
+### 4.3 边缘消融动画 (Edge Dissolution)
+
+**效果**：元素边缘逐渐消融，像雾气散开
+
+```css
+@keyframes edgeDissolution {
+    0% {
+        opacity: 0;
+        filter: blur(20px);
+        transform: scale(0.9);
+    }
+    50% {
+        opacity: 1;
+        filter: blur(5px);
+        transform: scale(1.02);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
+    }
+}
+
+.dissolve-in {
+    animation: edgeDissolution 500ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* 退出时边缘模糊消失 */
+@keyframes edgeDissolutionOut {
+    0% {
+        opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        filter: blur(15px);
+        transform: scale(0.95);
+    }
+}
+
+.dissolve-out {
+    animation: edgeDissolutionOut 400ms cubic-bezier(0.4, 0, 1, 1);
+}
+```
+
+**使用场景**：Toast通知、浮层消失、柔和过渡
+
+---
+
+### 4.4 光晕呼吸动画 (Glow Breathing)
+
+**效果**：持续的光晕强度变化，像在呼吸
+
+```css
+@keyframes glowBreathing {
+    0%, 100% {
+        box-shadow: 
+            0 0 15px 0 rgba(6, 182, 212, 0.2),
+            0 0 30px 0 rgba(6, 182, 212, 0.1);
+    }
+    50% {
+        box-shadow: 
+            0 0 25px 5px rgba(6, 182, 212, 0.4),
+            0 0 50px 10px rgba(6, 182, 212, 0.2);
+    }
+}
+
+.element-breathing {
+    animation: glowBreathing 3000ms cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+}
+```
+
+**使用场景**：等待状态、焦点提示、引导元素
+
+---
+
+### 4.5 涟漪扩散动画 (Ripple Expansion)
+
+**效果**：从点击点向外扩散的涟漪，符合无界理念
+
+```jsx
+// React 实现
+function RippleEffect({ onMouseDown, children, ...props }) {
+    const [ripples, setRipples] = React.useState([]);
+    
+    const addRipple = (event) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        
+        const ripple = { x, y, id: Date.now() };
+        setRipples([...ripples, ripple]);
+        
+        setTimeout(() => {
+            setRipples((prevRipples) => 
+                prevRipples.filter((r) => r.id !== ripple.id)
+            );
+        }, 800);
+        
+        onMouseDown?.(event);
+    };
+    
+    return (
+        <div 
+            {...props} 
+            onMouseDown={addRipple}
+            className="relative overflow-hidden"
+        >
+            {children}
+            {ripples.map((ripple) => (
+                <span
+                    key={ripple.id}
+                    className="absolute rounded-full pointer-events-none animate-ripple"
+                    style={{
+                        left: ripple.x,
+                        top: ripple.y,
+                        width: 0,
+                        height: 0,
+                        transform: 'translate(-50%, -50%)',
+                    }}
+                />
+            ))}
+        </div>
+    );
+}
+```
+
+```css
+@keyframes ripple {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 0.6;
+        background: radial-gradient(
+            circle,
+            rgba(6, 182, 212, 0.4) 0%,
+            rgba(6, 182, 212, 0.2) 50%,
+            rgba(6, 182, 212, 0) 100%
+        );
+    }
+    100% {
+        width: 400px;
+        height: 400px;
+        opacity: 0;
+    }
+}
+
+.animate-ripple {
+    animation: ripple 800ms cubic-bezier(0, 0, 0.2, 1);
+}
+```
+
+---
+
+## 五、流体特效动画 (Fluid Effects)
+
+### 5.1 液体流动效果 (Liquid Flow)
+
+**效果**：进度条像液体一样流动填充
+
+```css
+.progress-liquid {
+    position: relative;
+    height: 8px;
+    background: rgba(6, 182, 212, 0.1);
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+.progress-liquid-fill {
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        #06b6d4 0%,
+        #22d3ee 50%,
+        #06b6d4 100%
+    );
+    background-size: 200% 100%;
+    border-radius: 100px;
+    animation: liquidFlow 2s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+    box-shadow: 
+        0 0 15px rgba(6, 182, 212, 0.5),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes liquidFlow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+```
+
+---
+
+### 5.2 粒子爆炸效果 (Particle Burst)
+
+**效果**：成功时，粒子从中心爆炸散开
+
+```jsx
+function ParticleBurst({ trigger }) {
+    const [particles, setParticles] = React.useState([]);
+    
+    React.useEffect(() => {
+        if (trigger) {
+            const newParticles = Array.from({ length: 20 }, (_, i) => ({
+                id: i,
+                angle: (360 / 20) * i,
+                distance: Math.random() * 100 + 50,
+                duration: Math.random() * 500 + 500,
+            }));
+            setParticles(newParticles);
+            
+            setTimeout(() => setParticles([]), 1000);
+        }
+    }, [trigger]);
+    
+    return (
+        <div className="relative">
+            {particles.map((particle) => (
+                <div
+                    key={particle.id}
+                    className="absolute w-2 h-2 rounded-full bg-cyan-500"
+                    style={{
+                        left: '50%',
+                        top: '50%',
+                        transform: `translate(-50%, -50%)`,
+                        animation: `particleBurst ${particle.duration}ms cubic-bezier(0, 0, 0.2, 1) forwards`,
+                        '--angle': `${particle.angle}deg`,
+                        '--distance': `${particle.distance}px`,
+                    }}
+                />
+            ))}
+        </div>
+    );
+}
+```
+
+```css
+@keyframes particleBurst {
+    0% {
+        transform: 
+            translate(-50%, -50%) 
+            rotate(var(--angle)) 
+            translateX(0) 
+            scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: 
+            translate(-50%, -50%) 
+            rotate(var(--angle)) 
+            translateX(var(--distance)) 
+            scale(0);
+        opacity: 0;
+    }
+}
+```
+
+---
+
+### 5.3 波纹脉冲效果 (Wave Pulse)
+
+**效果**：从中心向外的波纹扩散，持续循环
+
+```css
+@keyframes wavePulse {
+    0% {
+        box-shadow: 
+            0 0 0 0 rgba(6, 182, 212, 0.7),
+            0 0 0 0 rgba(6, 182, 212, 0.4);
+    }
+    50% {
+        box-shadow: 
+            0 0 0 20px rgba(6, 182, 212, 0),
+            0 0 0 10px rgba(6, 182, 212, 0.2);
+    }
+    100% {
+        box-shadow: 
+            0 0 0 40px rgba(6, 182, 212, 0),
+            0 0 0 20px rgba(6, 182, 212, 0);
+    }
+}
+
+.wave-pulse {
+    animation: wavePulse 2s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+}
+```
+
+**使用场景**：录音中、实时同步、活动指示器
+
+---
+
+### 5.4 液滴加载动画 (Droplet Loading)
+
+**效果**：像水滴一样的加载动画
+
+```css
+.droplet-loader {
+    display: flex;
+    gap: 8px;
+}
+
+.droplet {
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(135deg, #06b6d4, #22d3ee);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    animation: dropletBounce 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+}
+
+.droplet:nth-child(1) { animation-delay: 0s; }
+.droplet:nth-child(2) { animation-delay: 0.2s; }
+.droplet:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dropletBounce {
+    0%, 100% {
+        transform: rotate(-45deg) translateY(0);
+        opacity: 0.4;
+    }
+    50% {
+        transform: rotate(-45deg) translateY(-20px);
+        opacity: 1;
+        box-shadow: 0 10px 20px rgba(6, 182, 212, 0.3);
+    }
+}
+```
+
+---
+
+## 六、常见动画类型
 
 ### 4.1 淡入淡出 (Fade)
 
@@ -444,25 +975,36 @@ cubic-bezier(0.34, 1.56, 0.64, 1)
 
 ## 五、组件动画规范
 
-### 5.1 按钮动画
+### 7.1 按钮动画（无界版本）
 
 ```css
-/* 悬停状态 */
-.button {
+/* 无界按钮 - 用光晕而非边框 */
+.button-borderless {
+    background: linear-gradient(135deg, #06b6d4, #0ea5e9);
+    border: none;
     transition: 
-        background-color 150ms cubic-bezier(0, 0, 0.2, 1),
         transform 150ms cubic-bezier(0, 0, 0.2, 1),
         box-shadow 150ms cubic-bezier(0, 0, 0.2, 1);
+    box-shadow: 
+        0 0 0 0 rgba(6, 182, 212, 0),
+        0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.button:hover {
+/* 悬停 - 光晕增强 */
+.button-borderless:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 
+        0 0 20px 0 rgba(6, 182, 212, 0.4),
+        0 0 40px 0 rgba(6, 182, 212, 0.2),
+        0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* 点击状态 */
-.button:active {
-    transform: translateY(0);
+/* 点击 - 光晕收缩 */
+.button-borderless:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 
+        0 0 10px 0 rgba(6, 182, 212, 0.3),
+        0 2px 8px rgba(0, 0, 0, 0.1);
     transition-duration: 100ms;
 }
 
@@ -483,20 +1025,44 @@ cubic-bezier(0.34, 1.56, 0.64, 1)
 }
 ```
 
-### 5.2 卡片动画
+### 7.2 卡片动画（无界版本）
 
 ```css
-.card {
+/* 无界卡片 - 晕染边缘 */
+.card-borderless {
+    background: 
+        radial-gradient(
+            ellipse at center,
+            rgba(255, 255, 255, 0.9) 0%,
+            rgba(255, 255, 255, 0.7) 70%,
+            rgba(255, 255, 255, 0.3) 90%,
+            rgba(255, 255, 255, 0) 100%
+        );
+    backdrop-filter: blur(10px);
+    border: none;
     transition: 
         transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
-        box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1),
+        background 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 0 20px rgba(6, 182, 212, 0.05),
+        0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
-.card:hover {
+/* 悬停 - 光晕增强 + 边缘更实 */
+.card-borderless:hover {
     transform: translateY(-4px);
+    background: 
+        radial-gradient(
+            ellipse at center,
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(255, 255, 255, 0.8) 70%,
+            rgba(255, 255, 255, 0.4) 90%,
+            rgba(255, 255, 255, 0) 100%
+        );
     box-shadow: 
-        0 12px 24px -8px rgba(0, 0, 0, 0.1),
-        0 4px 8px -4px rgba(0, 0, 0, 0.05);
+        0 0 30px rgba(6, 182, 212, 0.15),
+        0 16px 40px rgba(0, 0, 0, 0.1);
 }
 
 /* 卡片进入动画 */
@@ -1196,7 +1762,102 @@ function AutoplayCarousel() {
 
 ---
 
-## 十一、动画库推荐
+## 十四、无界动画完整示例
+
+### 完整的无界按钮组件
+
+```jsx
+import { motion } from 'framer-motion';
+
+function BorderlessButton({ children, onClick }) {
+    return (
+        <motion.button
+            className="relative px-6 py-3 rounded-lg overflow-hidden"
+            style={{
+                background: 'linear-gradient(135deg, #06b6d4, #0ea5e9)',
+                border: 'none',
+            }}
+            onClick={onClick}
+            whileHover={{
+                y: -2,
+                boxShadow: [
+                    '0 0 20px 0 rgba(6, 182, 212, 0.4)',
+                    '0 0 40px 0 rgba(6, 182, 212, 0.2)',
+                    '0 8px 20px rgba(0, 0, 0, 0.15)',
+                ].join(', '),
+            }}
+            whileTap={{
+                scale: 0.98,
+                boxShadow: [
+                    '0 0 10px 0 rgba(6, 182, 212, 0.3)',
+                    '0 2px 8px rgba(0, 0, 0, 0.1)',
+                ].join(', '),
+            }}
+            transition={{
+                type: 'spring',
+                damping: 20,
+                stiffness: 300,
+            }}
+        >
+            {/* 光晕背景层 */}
+            <motion.div
+                className="absolute inset-0 opacity-0"
+                style={{
+                    background: 'radial-gradient(circle at center, rgba(255, 255, 255, 0.3), transparent)',
+                }}
+                whileHover={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+            />
+            
+            {/* 文字 */}
+            <span className="relative z-10 text-white font-medium">
+                {children}
+            </span>
+        </motion.button>
+    );
+}
+```
+
+### 水滴加载组件
+
+```jsx
+function DropletLoading() {
+    return (
+        <div className="flex items-center justify-center gap-3">
+            {[0, 1, 2].map((i) => (
+                <motion.div
+                    key={i}
+                    className="w-4 h-4 rounded-full"
+                    style={{
+                        background: 'linear-gradient(135deg, #06b6d4, #22d3ee)',
+                        borderRadius: '50% 50% 50% 0',
+                    }}
+                    animate={{
+                        y: [-10, 0, -10],
+                        opacity: [0.4, 1, 0.4],
+                        rotate: -45,
+                        boxShadow: [
+                            '0 0 0 rgba(6, 182, 212, 0)',
+                            '0 10px 20px rgba(6, 182, 212, 0.3)',
+                            '0 0 0 rgba(6, 182, 212, 0)',
+                        ],
+                    }}
+                    transition={{
+                        duration: 1.2,
+                        repeat: Infinity,
+                        delay: i * 0.2,
+                        ease: [0.34, 1.56, 0.64, 1],
+                    }}
+                />
+            ))}
+        </div>
+    );
+}
+```
+
+---
+
+## 十五、动画库推荐
 
 ### 11.1 Framer Motion (React)
 
@@ -1249,9 +1910,9 @@ anime({
 
 ---
 
-## 十二、调试工具
+## 十六、调试工具
 
-### 12.1 Chrome DevTools
+### 16.1 Chrome DevTools
 
 ```
 1. 打开 DevTools
@@ -1263,7 +1924,7 @@ anime({
    - 逐帧查看
 ```
 
-### 12.2 动画时长可视化
+### 16.2 动画时长可视化
 
 ```css
 /* 开发时添加边框查看动画元素 */
@@ -1287,7 +1948,14 @@ anime({
 
 ---
 
-## 十三、检查清单
+## 十七、检查清单
+
+### 无界动画验证
+- [ ] 组件使用光晕而非边框来表达层次
+- [ ] 动画包含扩散/晕染效果
+- [ ] 边缘过渡柔和，无生硬截断
+- [ ] 符合流体力学原则（惯性、连续性、呼应性）
+- [ ] 使用流体缓动函数（fluid、liquid、wave）
 
 ### 动画实施前
 - [ ] 动画有明确目的

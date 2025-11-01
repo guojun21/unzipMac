@@ -38,12 +38,50 @@
 - 条件加载
 - 图片懒加载
 - 移动端资源优化
+- 移动端光晕简化
 
+## 八、无障碍响应式
+- 触摸目标尺寸适配
+- 文字大小响应式
+- 焦点可见性
 
+## 九、测试与调试
+- 必测设备列表
+- 响应式检查清单
 
-# 07-responsive-design.md - 响应式设计指南
+## 十、实战案例
+- 响应式卡片网格（无界版）
+- 响应式导航（无界版）
+- 响应式仪表板
+
+---
+
+# 响应式设计指南
+
+**版本**: v1.0  
+**设计理念**: 流体科技 (Fluid Technology)  
+**更新日期**: 2025-11-01
+
+---
 
 ## 一、断点系统 (Breakpoints)
+
+### 与设计总概念的关联
+
+响应式设计应体现**流体性**：
+
+```
+流体科技 (Fluid Technology)
+  ↓
+弹性 → 适应容器 → 响应式伸缩
+  ↓
+无界在响应式中的应用：
+  - 不同屏幕光晕强度调整
+  - 触摸设备增大目标
+  - 移动端简化光晕（性能）
+```
+
+---
 
 ### 1.1 核心断点定义
 
@@ -263,7 +301,12 @@ function Navigation() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     
     return (
-        <nav className="border-b border-gray-200">
+        <nav 
+          className="backdrop-blur-lg bg-white/85"
+          style={{
+            boxShadow: '0 0 20px rgba(6, 182, 212, 0.1), 0 8px 32px rgba(0, 0, 0, 0.08)',
+          }}
+        >
             <div className="container">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
@@ -271,24 +314,31 @@ function Navigation() {
                     
                     {/* 桌面导航 - 隐藏在移动端 */}
                     <div className="hidden md:flex items-center gap-8">
-                        <NavLink href="/">首页</NavLink>
-                        <NavLink href="/products">产品</NavLink>
-                        <NavLink href="/about">关于</NavLink>
-                        <Button>登录</Button>
+                        <NavLink href="/">首页</NavLink>   {/* ✅ 2字 */}
+                        <NavLink href="/products">产品</NavLink>  {/* ✅ 2字 */}
+                        <NavLink href="/about">关于</NavLink>     {/* ✅ 2字 */}
+                        <Button>登录</Button>  {/* ✅ 2字 */}
                     </div>
                     
                     {/* 移动端汉堡菜单 - 隐藏在桌面 */}
                     <button 
-                        className="md:hidden"
+                        className="md:hidden w-11 h-11 rounded-full flex items-center justify-center"
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        aria-label="菜单"
+                        style={{
+                          background: 'rgba(6, 182, 212, 0.1)',
+                        }}
                     >
                         <Menu className="w-6 h-6" />
                     </button>
                 </div>
                 
-                {/* 移动端菜单抽屉 */}
+                {/* 移动端菜单抽屉 - 无界版 */}
                 {mobileMenuOpen && (
-                    <div className="md:hidden py-4 border-t">
+                    <div className="md:hidden py-4 relative">
+                        {/* 顶部渐变分隔 */}
+                        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200/50 to-transparent" />
+                        
                         <NavLink href="/" mobile>首页</NavLink>
                         <NavLink href="/products" mobile>产品</NavLink>
                         <NavLink href="/about" mobile>关于</NavLink>
@@ -296,6 +346,9 @@ function Navigation() {
                     </div>
                 )}
             </div>
+            
+            {/* 底部光晕线 */}
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
         </nav>
     );
 }
@@ -326,10 +379,13 @@ function Sidebar() {
         );
     }
     
-    // 桌面端：固定侧边栏
+    // 桌面端：固定侧边栏（无界版）
     return (
-        <aside className="w-64 border-r border-gray-200">
+        <aside className="w-64 bg-gradient-to-br from-slate-50 to-slate-100/50 p-6 relative">
             <SidebarContent />
+            
+            {/* 右侧光晕边缘替代边框 */}
+            <div className="absolute top-0 right-0 bottom-0 w-px bg-gradient-to-b from-transparent via-slate-300/30 to-transparent" />
         </aside>
     );
 }
@@ -430,7 +486,15 @@ function ResponsiveTable({ data }) {
         return (
             <div className="space-y-4">
                 {data.map(item => (
-                    <div key={item.id} className="border rounded-lg p-4">
+                    <div 
+                      key={item.id} 
+                      className="rounded-xl p-4"
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.8)',
+                        backdropFilter: 'blur(8px)',
+                        boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.05), 0 4px 16px rgba(0, 0, 0, 0.06)',
+                      }}
+                    >
                         <div className="font-semibold">{item.name}</div>
                         <div className="text-sm text-gray-600 mt-1">
                             {item.email}
@@ -1031,12 +1095,20 @@ function ProductGrid({ products }) {
             {products.map(product => (
                 <div 
                     key={product.id}
-                    className="
-                        border rounded-lg 
-                        overflow-hidden 
-                        hover:shadow-lg 
-                        transition-shadow
-                    "
+                    className="overflow-hidden rounded-xl transition-all duration-300"
+                    style={{
+                      background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 70%, rgba(255, 255, 255, 0.3) 90%, transparent 100%)',
+                      backdropFilter: 'blur(10px)',
+                      boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.05), 0 8px 32px rgba(0, 0, 0, 0.08)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = '0 0 30px rgba(6, 182, 212, 0.15), 0 16px 48px rgba(0, 0, 0, 0.12)';
+                      e.currentTarget.style.transform = 'translateY(-4px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = '0 0 0 1px rgba(0, 0, 0, 0.05), 0 8px 32px rgba(0, 0, 0, 0.08)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
                 >
                     <img 
                         src={product.image}
@@ -1089,7 +1161,14 @@ function ResponsiveNav() {
     const [mobileOpen, setMobileOpen] = useState(false);
     
     return (
-        <nav className="bg-white border-b sticky top-0 z-50">
+        <nav 
+          className="sticky top-0 z-50"
+          style={{
+            background: 'rgba(255, 255, 255, 0.85)',
+            backdropFilter: 'blur(12px)',
+            boxShadow: '0 0 20px rgba(6, 182, 212, 0.1), 0 8px 32px rgba(0, 0, 0, 0.08)',
+          }}
+        >
             <div className="container">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
@@ -1129,40 +1208,25 @@ function ResponsiveNav() {
                     </button>
                 </div>
                 
-                {/* 移动端菜单 */}
+                {/* 移动端菜单 - 无界版 */}
                 {mobileOpen && (
-                    <div className="
-                        lg:hidden 
-                        py-4 
-                        border-t 
-                        space-y-2
-                    ">
-                        <NavLink href="/products" mobile>
-                            产品
-                        </NavLink>
-                        <NavLink href="/solutions" mobile>
-                            解决方案
-                        </NavLink>
-                        <NavLink href="/pricing" mobile>
-                            价格
-                        </NavLink>
-                        <NavLink href="/docs" mobile>
-                            文档
-                        </NavLink>
+                    <div className="lg:hidden py-4 space-y-2 relative">
+                        {/* 顶部渐变分隔 */}
+                        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200/50 to-transparent" />
                         
-                        <div className="
-                            pt-4 
-                            border-t 
-                            space-y-2
-                        ">
-                            <Button 
-                                variant="ghost" 
-                                className="w-full"
-                            >
-                                登录
+                        <NavLink href="/products" mobile>产品</NavLink>        {/* ✅ 2字 */}
+                        <NavLink href="/solutions" mobile>方案</NavLink>       {/* ✅ 2字 */}
+                        <NavLink href="/pricing" mobile>价格</NavLink>         {/* ✅ 2字 */}
+                        <NavLink href="/docs" mobile>文档</NavLink>            {/* ✅ 2字 */}
+                        
+                        <div className="pt-4 space-y-2 relative">
+                            {/* 分隔渐变线 */}
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200/50 to-transparent" />
+                            <Button variant="ghost" className="w-full">
+                                登录  {/* ✅ 2字 */}
                             </Button>
                             <Button className="w-full">
-                                免费试用
+                                试用  {/* ✅ 2字，简化 */}
                             </Button>
                         </div>
                     </div>
@@ -1179,21 +1243,18 @@ function ResponsiveNav() {
 function Dashboard() {
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* 顶部栏 */}
-            <header className="
-                bg-white 
-                border-b 
-                sticky top-0 
-                z-40
-            ">
-                <div className="
-                    flex items-center 
-                    justify-between 
-                    h-16 
-                    px-4 lg:px-8
-                ">
+            {/* 顶部栏 - 无界版 */}
+            <header 
+              className="sticky top-0 z-40"
+              style={{
+                background: 'rgba(255, 255, 255, 0.9)',
+                backdropFilter: 'blur(12px)',
+                boxShadow: '0 0 20px rgba(6, 182, 212, 0.1), 0 8px 32px rgba(0, 0, 0, 0.08)',
+              }}
+            >
+                <div className="flex items-center justify-between h-16 px-4 lg:px-8">
                     <h1 className="text-xl font-bold">
-                        仪表板
+                        仪表板  {/* ✅ 3字 */}
                     </h1>
                     <UserMenu />
                 </div>
@@ -1278,9 +1339,19 @@ function Dashboard() {
 
 ---
 
-## 十三、最佳实践总结
+## 十三、响应式检查清单
 
-### ✅ 推荐做法
+### 无界响应式验证（⭐ 新增）
+- [ ] 所有屏幕尺寸都无硬性边框
+- [ ] 移动端光晕效果简化（性能考虑）
+- [ ] 桌面端光晕效果完整
+- [ ] 触摸设备目标尺寸≥44×44px
+- [ ] 不同屏幕间距合理缩放
+- [ ] 渐变分隔线在所有尺寸可见
+
+### 最佳实践
+
+#### ✅ 推荐做法
 
 1. **移动优先设计**：从最小屏幕开始设计，逐步增强
 2. **触摸友好**：所有交互元素 ≥ 44×44px
@@ -1289,8 +1360,10 @@ function Dashboard() {
 5. **渐进增强**：确保核心功能在所有设备可用
 6. **性能优先**：移动端资源优化，懒加载，条件加载
 7. **测试覆盖**：在真实设备上测试，不仅仅是模拟器
+8. **⭐ 无界适配**：移动端简化光晕，桌面端完整效果
+9. **⭐ 极简文字**：移动端文字更简短，图标更多
 
-### ❌ 避免做法
+#### ❌ 避免做法
 
 1. ❌ 使用固定宽度而非响应式单位
 2. ❌ 小于 44px 的触摸目标
@@ -1299,6 +1372,37 @@ function Dashboard() {
 5. ❌ 仅针对 iPhone 或特定设备优化
 6. ❌ 忽略横屏模式
 7. ❌ 过度依赖 JavaScript 检测屏幕尺寸
+8. ❌ 在移动端使用过多光晕（影响性能）
+9. ❌ 在小屏幕显示冗长文字
+
+---
+
+## 十四、移动端光晕优化
+
+### 性能考虑
+
+移动端应该简化光晕效果：
+
+```css
+/* 桌面端：完整光晕 */
+@media (min-width: 1024px) and (hover: hover) {
+  .card-borderless:hover {
+    box-shadow: 
+      0 0 30px rgba(6, 182, 212, 0.2),
+      0 0 60px rgba(6, 182, 212, 0.1),
+      0 16px 48px rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* 移动端：简化光晕 */
+@media (max-width: 1023px) {
+  .card-borderless:active {
+    box-shadow: 
+      0 0 15px rgba(6, 182, 212, 0.2),
+      0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+}
+```
 
 ---
 
@@ -1350,6 +1454,11 @@ function MyComponent() {
 ```
 
 ---
+
+---
+
+**响应式设计让界面在所有设备上都如水般流畅。**  
+**无界设计在不同屏幕都保持优雅。** 📱💻✨
 
 **文档版本**: v1.0  
 **最后更新**: 2025-11-01

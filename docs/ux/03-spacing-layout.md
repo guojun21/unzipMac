@@ -78,6 +78,20 @@
 
 ## 一、布局哲学
 
+### 与设计总概念的关联
+
+本布局系统基于 **00-design-concept.md** 中的核心理念：
+
+```
+流体科技 (Fluid Technology)
+  ↓
+无界 (Borderless)
+  ↓
+光晕扩散 + 水滴晕染 + 边缘消融
+  ↓
+布局应用：用渐变和光晕替代硬性边框
+```
+
 ### 流体网格理念
 压缩包解压是**数据从压缩态到展开态的过渡**，布局应模拟这种**流动性**：
 
@@ -85,14 +99,15 @@
 压缩 → 紧凑但有序 → 高信息密度
 解压 → 展开且透气 → 内容自然流动
 弹性 → 适应容器 → 响应式伸缩
-层叠 → 深度感知 → Z轴层次
+层叠 → 深度感知 → Z轴层次（用模糊度，非边框）
 ```
 
-### 布局三原则
+### 布局四原则
 
 1. **8px 基准网格**: 所有间距必须是 8 的倍数
 2. **呼吸空间**: 元素之间需要足够的"水域"来流动
 3. **视觉重心**: 重要内容占据视觉中心，次要内容退后
+4. **⭐ 无界分隔**: 用光晕、渐变、模糊度区分区域，避免硬性边框
 
 ---
 
@@ -279,10 +294,15 @@
 ### 负边距技巧
 
 ```jsx
-/* ✅ 正确：抵消容器内边距 */
+/* ✅ 正确（无界版）：用渐变遮罩替代边框 */
 <div className="p-6">
-  <div className="-mx-6 border-t border-b">
-    {/* 让边框延伸到容器边缘 */}
+  <div className="-mx-6 relative">
+    {/* 顶部渐变分隔 */}
+    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+    {/* 内容 */}
+    <div className="py-4">内容区</div>
+    {/* 底部渐变分隔 */}
+    <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
   </div>
 </div>
 
@@ -290,6 +310,66 @@
 <div className="max-w-2xl mx-auto px-4">
   <img className="-mx-4 w-screen max-w-none" src="wide.jpg" />
 </div>
+```
+
+---
+
+## 四.五、无界布局原则 (Borderless Layout)
+
+### 核心理念
+
+**永远不用硬边框 (border) 来分隔区域**，改用：
+- ✅ 光晕阴影 (box-shadow)
+- ✅ 渐变遮罩 (gradient)
+- ✅ 模糊度差异 (backdrop-filter)
+- ✅ 透明度层次 (opacity)
+
+### 区域分隔方法
+
+#### 方法一：光晕阴影分隔
+
+```css
+/* ❌ 传统：用边框 */
+.section {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* ✅ 无界：用柔和阴影 */
+.section-borderless {
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    0 8px 16px -4px rgba(0, 0, 0, 0.08);
+  /* 或用内阴影暗示底部边界 */
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+}
+```
+
+#### 方法二：渐变遮罩分隔
+
+```jsx
+/* 用渐变线替代实线边框 */
+<div className="relative">
+  <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200/50 to-transparent" />
+</div>
+
+/* 深色模式 */
+<div className="relative">
+  <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-700/30 to-transparent" />
+</div>
+```
+
+#### 方法三：光晕边缘
+
+```css
+/* 用发光边缘替代边框 */
+.container-glow {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 0 0 1px rgba(6, 182, 212, 0.1),    /* 极淡的轮廓 */
+    0 0 20px rgba(6, 182, 212, 0.05),    /* 内层光晕 */
+    0 8px 32px rgba(0, 0, 0, 0.08);      /* 外层阴影 */
+}
 ```
 
 ---
@@ -346,13 +426,13 @@
 
 ## 六、布局模式 (Layout Patterns)
 
-### 1. 单列布局 - 内容优先
+### 1. 单列布局 - 内容优先（无界版）
 
 ```jsx
-/* 移动端优先的单列 */
-<div className="min-h-screen flex flex-col">
-  {/* 头部固定 */}
-  <header className="sticky top-0 z-50 bg-white border-b px-4 py-3">
+/* 移动端优先的单列 - 无界设计 */
+<div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-50 to-white">
+  {/* 头部固定 - 用阴影而非边框 */}
+  <header className="sticky top-0 z-50 backdrop-blur-lg bg-white/80 px-4 py-3 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08)]">
     顶部导航
   </header>
   
@@ -361,35 +441,53 @@
     <section>内容区块</section>
   </main>
   
-  {/* 底部 */}
-  <footer className="border-t px-4 py-6">
+  {/* 底部 - 用渐变遮罩而非边框 */}
+  <footer className="relative px-4 py-6 bg-gradient-to-t from-slate-50 to-transparent">
+    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200/50 to-transparent" />
     底部信息
   </footer>
 </div>
 ```
+
+**无界设计要点**:
+- ❌ 移除 `border-b` / `border-t`
+- ✅ 用 `shadow` 或渐变遮罩分隔
+- ✅ 添加 `backdrop-blur` 增强层次感
+- ✅ 用背景渐变创造自然过渡
 
 **间距规范**:
 - 页面边距: `px-4` (16px)
 - 区块间距: `space-y-6` (24px)
 - 头部/底部内边距: `py-3` / `py-6`
 
-### 2. 侧边栏布局 - 导航 + 内容
+### 2. 侧边栏布局 - 导航 + 内容（无界版）
 
 ```jsx
 <div className="flex h-screen">
-  {/* 侧边栏 - 固定宽度 */}
-  <aside className="w-64 border-r bg-slate-50 p-6 space-y-4 overflow-y-auto">
+  {/* 侧边栏 - 无界设计 */}
+  <aside className="w-64 bg-gradient-to-br from-slate-50 to-slate-100/50 p-6 space-y-4 overflow-y-auto relative">
     <nav>导航菜单</nav>
+    
+    {/* 右侧光晕边缘替代边框 */}
+    <div className="absolute top-0 right-0 bottom-0 w-px bg-gradient-to-b from-transparent via-slate-300/30 to-transparent" />
+    {/* 或用阴影 */}
+    <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-slate-900/5 pointer-events-none" />
   </aside>
   
   {/* 主内容 - 自适应 */}
-  <main className="flex-1 overflow-y-auto">
+  <main className="flex-1 overflow-y-auto bg-white">
     <div className="max-w-6xl mx-auto px-8 py-12 space-y-8">
       <section>内容</section>
     </div>
   </main>
 </div>
 ```
+
+**无界设计要点**:
+- ❌ 移除 `border-r`
+- ✅ 用渐变遮罩或光晕阴影替代
+- ✅ 背景用渐变增加深度
+- ✅ 边缘用 `pointer-events-none` 的渐变层
 
 **间距规范**:
 - 侧边栏宽度: `256px` (w-64)
@@ -471,14 +569,17 @@
 - 卡片内边距: `p-6` (24px)
 - 内部元素间距: `space-y-4` (16px)
 
-### 6. 头部固定 - 工具栏布局
+### 6. 头部固定 - 工具栏布局（无界版）
 
 ```jsx
 <div className="h-screen flex flex-col">
-  {/* 固定头部 */}
-  <header className="flex-none h-16 border-b px-6 flex items-center justify-between">
+  {/* 固定头部 - 光晕阴影替代边框 */}
+  <header className="flex-none h-16 px-6 flex items-center justify-between relative backdrop-blur-md bg-white/90 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_8px_24px_-4px_rgba(0,0,0,0.08)]">
     <Logo />
     <Actions />
+    
+    {/* 可选：底部光晕提示 */}
+    <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
   </header>
   
   {/* 可滚动内容 */}
@@ -489,6 +590,12 @@
   </div>
 </div>
 ```
+
+**无界设计要点**:
+- ❌ 移除 `border-b`
+- ✅ 用 `shadow` 创造层次
+- ✅ 添加 `backdrop-blur-md` 毛玻璃效果
+- ✅ 可选：底部加青色光晕提示
 
 **间距规范**:
 - 头部高度: `h-16` (64px)
@@ -556,47 +663,107 @@
 
 ---
 
-## 八、Z轴层次 (Z-Index)
+## 八、Z轴层次 (Z-Index) - 无界版
 
-### 层级定义
+### 核心原则
 
-```css
-/* Z轴分层系统 */
---z-base:          0;     /* 基础层 - 正常文档流 */
---z-dropdown:      10;    /* 下拉菜单 */
---z-sticky:        20;    /* 粘性定位 */
---z-fixed:         30;    /* 固定定位 */
---z-overlay:       40;    /* 遮罩层 */
---z-modal:         50;    /* 模态框 */
---z-popover:       60;    /* 弹出框 */
---z-tooltip:       70;    /* 工具提示 */
---z-notification:  80;    /* 通知 */
---z-max:           9999;  /* 最高层 - 紧急提示 */
+**用模糊度而非边框区分层次**
+```
+传统设计: Z-Index + 边框 + 阴影大小
+无界设计: Z-Index + 模糊度 + 光晕强度
 ```
 
-### Tailwind 映射
+### 层级定义（含无界效果）
+
+```css
+/* Z轴分层系统 - 每层有对应的模糊和光晕效果 */
+--z-base:          0;     /* 基础层 - 无模糊 */
+--z-dropdown:      10;    /* 下拉菜单 - blur(8px) */
+--z-sticky:        20;    /* 粘性定位 - blur(10px) */
+--z-fixed:         30;    /* 固定定位 - blur(12px) */
+--z-overlay:       40;    /* 遮罩层 - blur(20px) */
+--z-modal:         50;    /* 模态框 - blur(24px) */
+--z-popover:       60;    /* 弹出框 - blur(16px) */
+--z-tooltip:       70;    /* 工具提示 - blur(8px) */
+--z-notification:  80;    /* 通知 - blur(10px) */
+--z-max:           9999;  /* 最高层 - blur(30px) */
+```
+
+### 无界层次表现
+
+```css
+/* 层次越高，背景模糊度越大，光晕越强 */
+
+/* Level 1: 下拉菜单 */
+.dropdown-borderless {
+  z-index: 10;
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 0 0 1px rgba(0, 0, 0, 0.05),
+    0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Level 2: 粘性头部 */
+.sticky-borderless {
+  z-index: 20;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    0 0 20px rgba(6, 182, 212, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* Level 3: 遮罩层 */
+.overlay-borderless {
+  z-index: 40;
+  backdrop-filter: blur(20px);
+  background: rgba(15, 23, 42, 0.6);  /* 半透明深色 */
+}
+
+/* Level 4: 模态框 */
+.modal-borderless {
+  z-index: 50;
+  backdrop-filter: blur(24px);
+  background: 
+    radial-gradient(
+      ellipse at center,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.9) 70%,
+      rgba(255, 255, 255, 0.8) 100%
+    );
+  box-shadow: 
+    0 0 0 1px rgba(6, 182, 212, 0.1),
+    0 0 60px rgba(6, 182, 212, 0.15),
+    0 20px 80px rgba(0, 0, 0, 0.2);
+}
+```
+
+### Tailwind 无界映射
 
 ```jsx
-/* 下拉菜单 */
-<div className="absolute z-10 mt-2 bg-white shadow-lg">
+/* 下拉菜单 - 无界版 */
+<div className="absolute z-10 mt-2 backdrop-blur-lg bg-white/90 rounded-xl shadow-[0_0_0_1px_rgba(0,0,0,0.05),0_10px_40px_rgba(0,0,0,0.1)]">
   下拉内容
 </div>
 
-/* 粘性头部 */
-<header className="sticky top-0 z-20 bg-white">
+/* 粘性头部 - 无界版 */
+<header className="sticky top-0 z-20 backdrop-blur-md bg-white/85 shadow-[0_0_20px_rgba(6,182,212,0.1),0_8px_32px_rgba(0,0,0,0.08)]">
   导航栏
 </header>
 
-/* 遮罩层 */
-<div className="fixed inset-0 z-40 bg-black/50" />
+/* 遮罩层 - 无界版（高斯模糊） */
+<div className="fixed inset-0 z-40 backdrop-blur-xl bg-slate-900/60" />
 
-/* 模态框 */
+/* 模态框 - 无界版（晕染边缘） */
 <div className="fixed inset-0 z-50 flex items-center justify-center">
-  <Modal />
+  <div className="backdrop-blur-2xl bg-gradient-radial from-white/95 via-white/90 to-white/80 rounded-2xl p-8 shadow-[0_0_0_1px_rgba(6,182,212,0.1),0_0_60px_rgba(6,182,212,0.15),0_20px_80px_rgba(0,0,0,0.2)]">
+    <Modal />
+  </div>
 </div>
 
-/* 工具提示 */
-<div className="absolute z-[70] px-2 py-1 bg-slate-900 text-white text-xs">
+/* 工具提示 - 无界版（光晕边缘） */
+<div className="absolute z-[70] px-3 py-2 backdrop-blur-md bg-slate-900/90 text-white text-xs rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.3)]">
   提示文字
 </div>
 ```
@@ -670,23 +837,40 @@
   -webkit-overflow-scrolling: touch; /* iOS 惯性滚动 */
 }
 
-/* 自定义滚动条 - Webkit */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* 自定义滚动条 - Webkit 无界版 */
+.custom-scrollbar-borderless::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
+.custom-scrollbar-borderless::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.3);
-  border-radius: 4px;
+/* 无界滚动条 - 有光晕效果 */
+.custom-scrollbar-borderless::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.3),
+    rgba(34, 211, 238, 0.3)
+  );
+  border-radius: 100px;  /* 完全圆润 */
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  box-shadow: 
+    0 0 10px rgba(6, 182, 212, 0.2),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.5);
+.custom-scrollbar-borderless::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.5),
+    rgba(34, 211, 238, 0.5)
+  );
+  box-shadow: 
+    0 0 15px rgba(6, 182, 212, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.6);
 }
 
 /* Tailwind 插件 */
@@ -978,14 +1162,21 @@
 
 ## 十三、布局检查清单
 
-开发完成后，用此清单验证布局质量：
+### 无界布局验证（⭐ 新增）
+- [ ] **无硬性边框**：没有使用 `border-t/b/l/r` 实线
+- [ ] **光晕分隔**：区域用阴影、渐变或模糊度区分
+- [ ] **模糊层次**：Z轴高的元素有更强的 backdrop-blur
+- [ ] **晕染边缘**：容器边缘用渐变而非硬边
+- [ ] **滚动条无界**：滚动条有光晕效果，完全圆润
+- [ ] **背景渐变**：用渐变背景创造深度，而非单色
 
+### 基础布局验证
 - [ ] 所有间距都是 8px 的倍数
 - [ ] 页面有合理的最大宽度（不超过 1536px）
 - [ ] 移动端有足够的左右边距（最少 16px）
 - [ ] 卡片/组件间距一致
 - [ ] 头部/底部固定时不遮挡内容
-- [ ] 滚动区域有明确的视觉边界
+- [ ] 滚动区域有明确的视觉边界（用渐变遮罩）
 - [ ] 所有可点击元素≥ 44×44px
 - [ ] Z-index 使用有层次且无冲突
 - [ ] 响应式断点下布局不破碎
@@ -995,15 +1186,15 @@
 
 ---
 
-## 十四、Tailwind 完整配置
+## 十四、Tailwind 完整配置（无界版）
 
 ```javascript
-// tailwind.config.js
+// tailwind.config.js - 无界设计配置
 module.exports = {
   theme: {
     extend: {
       spacing: {
-        // 自定义间距（如有需要）
+        // 自定义间距
         '18': '4.5rem',   // 72px
         '88': '22rem',    // 352px
       },
@@ -1013,7 +1204,7 @@ module.exports = {
         'wide': '1152px',
       },
       zIndex: {
-        // 自定义 Z 轴
+        // 自定义 Z 轴（含模糊度关联）
         'dropdown': '10',
         'sticky': '20',
         'fixed': '30',
@@ -1030,15 +1221,109 @@ module.exports = {
       minWidth: {
         'touch': '44px',
       },
+      // ⭐ 无界专用配置
+      backdropBlur: {
+        'xs': '2px',
+        'glass': '20px',
+        'heavy': '30px',
+      },
+      boxShadow: {
+        // 无界光晕阴影
+        'glow-sm': '0 0 10px rgba(6, 182, 212, 0.2)',
+        'glow': '0 0 20px rgba(6, 182, 212, 0.3)',
+        'glow-lg': '0 0 40px rgba(6, 182, 212, 0.4)',
+        'glow-xl': '0 0 60px rgba(6, 182, 212, 0.5)',
+        // 无界容器阴影
+        'borderless': [
+          '0 0 0 1px rgba(0, 0, 0, 0.05)',
+          '0 8px 32px rgba(0, 0, 0, 0.08)',
+        ].join(','),
+        'borderless-hover': [
+          '0 0 0 1px rgba(6, 182, 212, 0.1)',
+          '0 0 30px rgba(6, 182, 212, 0.15)',
+          '0 16px 48px rgba(0, 0, 0, 0.12)',
+        ].join(','),
+      },
+      backgroundImage: {
+        // 无界渐变背景
+        'gradient-radial': 'radial-gradient(ellipse at center, var(--tw-gradient-stops))',
+        'gradient-radial-soft': 'radial-gradient(ellipse at center, var(--tw-gradient-stops))',
+        // 分隔线渐变
+        'divider-horizontal': 'linear-gradient(to right, transparent, rgba(148, 163, 184, 0.3), transparent)',
+        'divider-vertical': 'linear-gradient(to bottom, transparent, rgba(148, 163, 184, 0.3), transparent)',
+      },
     },
   },
   plugins: [
     // 容器查询插件
     require('@tailwindcss/container-queries'),
+    // 自定义无界工具类
+    function({ addUtilities }) {
+      addUtilities({
+        '.bg-borderless': {
+          background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 70%, rgba(255, 255, 255, 0.3) 90%, rgba(255, 255, 255, 0) 100%)',
+        },
+        '.bg-borderless-dark': {
+          background: 'radial-gradient(ellipse at center, rgba(30, 41, 59, 0.9) 0%, rgba(30, 41, 59, 0.6) 70%, rgba(30, 41, 59, 0.2) 90%, rgba(30, 41, 59, 0) 100%)',
+        },
+      });
+    },
   ],
 }
 ```
 
 ---
 
-**好的布局是隐形的，用户只会感受到舒适，而不会注意到设计。**
+## 十五、无界布局实战示例
+
+### 完整的无界卡片组件
+
+```jsx
+import { motion } from 'framer-motion';
+
+function BorderlessCard({ children, className = '' }) {
+  return (
+    <motion.div
+      className={`relative p-6 ${className}`}
+      style={{
+        background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 70%, rgba(255, 255, 255, 0.3) 90%, rgba(255, 255, 255, 0) 100%)',
+        backdropFilter: 'blur(10px)',
+      }}
+      whileHover={{
+        background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 70%, rgba(255, 255, 255, 0.4) 90%, rgba(255, 255, 255, 0) 100%)',
+        boxShadow: [
+          '0 0 30px rgba(6, 182, 212, 0.15)',
+          '0 16px 40px rgba(0, 0, 0, 0.1)',
+        ].join(', '),
+      }}
+      transition={{ duration: 0.3 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+```
+
+### 无界头部组件
+
+```jsx
+function BorderlessHeader() {
+  return (
+    <header className="sticky top-0 z-20 backdrop-blur-md bg-white/85 px-6 py-3 shadow-[0_0_20px_rgba(6,182,212,0.1),0_8px_32px_rgba(0,0,0,0.08)]">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <Logo />
+        <Navigation />
+        <Actions />
+      </div>
+      
+      {/* 底部光晕线 */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
+    </header>
+  );
+}
+```
+
+---
+
+**好的布局是隐形的，用户只会感受到舒适和流动，而不会注意到边界。**  
+**无界设计让界面像水一样自然流动。** 💧

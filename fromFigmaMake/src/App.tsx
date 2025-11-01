@@ -1,7 +1,15 @@
 import { motion } from "motion/react";
-import { Droplet, Sparkles, Layers, Type, Palette, Grid3x3, Box } from "lucide-react";
+import { Droplet, Sparkles, Layers, Type, Palette, Grid3x3, Box, Package } from "lucide-react";
+import { useState } from "react";
+import ComponentShowcase from "./pages/ComponentShowcase";
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState<'foundation' | 'components'>('foundation');
+
+  if (currentPage === 'components') {
+    return <ComponentShowcase onBack={() => setCurrentPage('foundation')} />;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-cyan-50/30">
       {/* Header */}
@@ -11,9 +19,26 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: "spring", stiffness: 100, damping: 20 }}
         >
-          <div className="flex items-center gap-3 mb-3">
-            <Droplet className="w-10 h-10 text-cyan-500" />
-            <h1 className="text-5xl">Fluid Technology</h1>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <Droplet className="w-10 h-10 text-cyan-500" />
+              <h1 className="text-5xl">Fluid Technology</h1>
+            </div>
+            <motion.button
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex items-center gap-2"
+              style={{
+                boxShadow: '0 0 20px rgba(6,182,212,0.3), 0 0 40px rgba(6,182,212,0.15)'
+              }}
+              whileHover={{
+                boxShadow: '0 0 30px rgba(6,182,212,0.4), 0 0 60px rgba(6,182,212,0.2)',
+                y: -2
+              }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setCurrentPage('components')}
+            >
+              <Package className="w-5 h-5" />
+              <span>查看组件</span>
+            </motion.button>
           </div>
           <p className="text-xl text-slate-600">流体科技 Design System Foundation</p>
           <p className="text-slate-500 mt-2 max-w-2xl">

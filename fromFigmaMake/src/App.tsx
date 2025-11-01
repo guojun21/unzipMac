@@ -1,13 +1,18 @@
 import { motion } from "motion/react";
-import { Droplet, Sparkles, Layers, Type, Palette, Grid3x3, Box, Package } from "lucide-react";
+import { Droplet, Sparkles, Layers, Type, Palette, Grid3x3, Box, Package, Layers3 } from "lucide-react";
 import { useState } from "react";
 import ComponentShowcase from "./pages/ComponentShowcase";
+import BorderlessComparison from "./pages/BorderlessComparison";
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'foundation' | 'components'>('foundation');
+  const [currentPage, setCurrentPage] = useState<'foundation' | 'components' | 'comparison'>('foundation');
 
   if (currentPage === 'components') {
     return <ComponentShowcase onBack={() => setCurrentPage('foundation')} />;
+  }
+
+  if (currentPage === 'comparison') {
+    return <BorderlessComparison onBack={() => setCurrentPage('foundation')} />;
   }
 
   return (
@@ -24,21 +29,38 @@ export default function App() {
               <Droplet className="w-10 h-10 text-cyan-500" />
               <h1 className="text-5xl">Fluid Technology</h1>
             </div>
-            <motion.button
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex items-center gap-2"
-              style={{
-                boxShadow: '0 0 20px rgba(6,182,212,0.3), 0 0 40px rgba(6,182,212,0.15)'
-              }}
-              whileHover={{
-                boxShadow: '0 0 30px rgba(6,182,212,0.4), 0 0 60px rgba(6,182,212,0.2)',
-                y: -2
-              }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setCurrentPage('components')}
-            >
-              <Package className="w-5 h-5" />
-              <span>查看组件</span>
-            </motion.button>
+            <div className="flex gap-3">
+              <motion.button
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-400 to-purple-500 text-white flex items-center gap-2"
+                style={{
+                  boxShadow: '0 0 20px rgba(167,139,250,0.3), 0 0 40px rgba(167,139,250,0.15)'
+                }}
+                whileHover={{
+                  boxShadow: '0 0 30px rgba(167,139,250,0.4), 0 0 60px rgba(167,139,250,0.2)',
+                  y: -2
+                }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setCurrentPage('comparison')}
+              >
+                <Layers3 className="w-5 h-5" />
+                <span>羽化研究</span>
+              </motion.button>
+              <motion.button
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex items-center gap-2"
+                style={{
+                  boxShadow: '0 0 20px rgba(6,182,212,0.3), 0 0 40px rgba(6,182,212,0.15)'
+                }}
+                whileHover={{
+                  boxShadow: '0 0 30px rgba(6,182,212,0.4), 0 0 60px rgba(6,182,212,0.2)',
+                  y: -2
+                }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setCurrentPage('components')}
+              >
+                <Package className="w-5 h-5" />
+                <span>查看组件</span>
+              </motion.button>
+            </div>
           </div>
           <p className="text-xl text-slate-600">流体科技 Design System Foundation</p>
           <p className="text-slate-500 mt-2 max-w-2xl">

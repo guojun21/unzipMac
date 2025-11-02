@@ -1,14 +1,15 @@
 import { motion } from "motion/react";
-import { Droplet, Sparkles, Layers, Type, Palette, Grid3x3, Box, Package, Layers3, Sparkle, Waves, Layers2 } from "lucide-react";
+import { Droplet, Sparkles, Layers, Type, Palette, Grid3x3, Box, Package, Layers3, Sparkle, Waves, Layers2, Zap } from "lucide-react";
 import { useState } from "react";
 import ComponentShowcase from "./pages/ComponentShowcase";
 import BorderlessComparison from "./pages/BorderlessComparison";
 import AdvancedFeatheringTechniques from "./pages/AdvancedFeatheringTechniques";
 import DynamicBorderlessDemo from "./pages/DynamicBorderlessDemo";
 import MultiLayerFeatherDemo from "./pages/MultiLayerFeatherDemo";
+import DynamicBorderlessDemoV5 from "./pages/DynamicBorderlessDemoV5";
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'foundation' | 'components' | 'comparison' | 'advanced' | 'dynamic' | 'multilayer'>('foundation');
+  const [currentPage, setCurrentPage] = useState<'foundation' | 'components' | 'comparison' | 'advanced' | 'dynamic' | 'multilayer' | 'v5'>('foundation');
 
   if (currentPage === 'components') {
     return <ComponentShowcase onBack={() => setCurrentPage('foundation')} />;
@@ -28,6 +29,10 @@ export default function App() {
 
   if (currentPage === 'multilayer') {
     return <MultiLayerFeatherDemo onBack={() => setCurrentPage('foundation')} />;
+  }
+
+  if (currentPage === 'v5') {
+    return <DynamicBorderlessDemoV5 onBack={() => setCurrentPage('foundation')} />;
   }
 
   return (
@@ -104,6 +109,21 @@ export default function App() {
               >
                 <Layers2 className="w-5 h-5" />
                 <span>多层羽化</span>
+              </motion.button>
+              <motion.button
+                className="px-5 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-white flex items-center gap-2"
+                style={{
+                  boxShadow: '0 0 20px rgba(251,191,36,0.3), 0 0 40px rgba(251,191,36,0.15)'
+                }}
+                whileHover={{
+                  boxShadow: '0 0 30px rgba(251,191,36,0.4), 0 0 60px rgba(251,191,36,0.2)',
+                  y: -2
+                }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setCurrentPage('v5')}
+              >
+                <Zap className="w-5 h-5" />
+                <span>最终版本</span>
               </motion.button>
               <motion.button
                 className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex items-center gap-2"

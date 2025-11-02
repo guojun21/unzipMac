@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Droplet, Sparkles, Layers, Type, Palette, Grid3x3, Box, Package, Layers3, Sparkle, Waves, Layers2, Zap } from "lucide-react";
+import { Droplet, Sparkles, Layers, Type, Palette, Grid3x3, Box, Package, Layers3, Sparkle, Waves, Layers2, Zap, Star } from "lucide-react";
 import { useState } from "react";
 import ComponentShowcase from "./pages/ComponentShowcase";
 import BorderlessComparison from "./pages/BorderlessComparison";
@@ -7,9 +7,10 @@ import AdvancedFeatheringTechniques from "./pages/AdvancedFeatheringTechniques";
 import DynamicBorderlessDemo from "./pages/DynamicBorderlessDemo";
 import MultiLayerFeatherDemo from "./pages/MultiLayerFeatherDemo";
 import DynamicBorderlessDemoV5 from "./pages/DynamicBorderlessDemoV5";
+import DynamicBorderlessV6Perfect from "./pages/04-DynamicBorderlessV6-Perfect";
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'foundation' | 'components' | 'comparison' | 'advanced' | 'dynamic' | 'multilayer' | 'v5'>('foundation');
+  const [currentPage, setCurrentPage] = useState<'foundation' | 'components' | 'comparison' | 'advanced' | 'dynamic' | 'multilayer' | 'v5' | 'v6'>('foundation');
 
   if (currentPage === 'components') {
     return <ComponentShowcase onBack={() => setCurrentPage('foundation')} />;
@@ -33,6 +34,10 @@ export default function App() {
 
   if (currentPage === 'v5') {
     return <DynamicBorderlessDemoV5 onBack={() => setCurrentPage('foundation')} />;
+  }
+
+  if (currentPage === 'v6') {
+    return <DynamicBorderlessV6Perfect onBack={() => setCurrentPage('foundation')} />;
   }
 
   return (
@@ -63,7 +68,7 @@ export default function App() {
                 onClick={() => setCurrentPage('comparison')}
               >
                 <Layers3 className="w-5 h-5" />
-                <span>羽化研究</span>
+                <span>01 羽化</span>
               </motion.button>
               <motion.button
                 className="px-5 py-3 rounded-xl bg-gradient-to-r from-pink-400 to-purple-500 text-white flex items-center gap-2"
@@ -123,7 +128,23 @@ export default function App() {
                 onClick={() => setCurrentPage('v5')}
               >
                 <Zap className="w-5 h-5" />
-                <span>最终版本</span>
+                <span>03 v0.5</span>
+              </motion.button>
+              <motion.button
+                className="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-green-500 text-white flex items-center gap-2"
+                style={{
+                  boxShadow: '0 0 30px rgba(34,197,94,0.4), 0 0 60px rgba(34,197,94,0.2)'
+                }}
+                whileHover={{
+                  boxShadow: '0 0 40px rgba(34,197,94,0.5), 0 0 80px rgba(34,197,94,0.3)',
+                  y: -2,
+                  scale: 1.05
+                }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setCurrentPage('v6')}
+              >
+                <Star className="w-5 h-5" />
+                <span>04 v0.6 ✓</span>
               </motion.button>
               <motion.button
                 className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex items-center gap-2"

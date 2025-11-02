@@ -17,7 +17,7 @@ export default function BorderlessComparison({ onBack }: BorderlessComparisonPro
         >
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-5xl mb-2">Borderless Feathering Study</h1>
+              <h1 className="text-5xl mb-2">01 · Feather Intensity Study</h1>
               <p className="text-xl text-slate-600">羽化强度研究 · Finding the Perfect Edge Softness</p>
             </div>
             {onBack && (

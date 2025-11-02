@@ -45,8 +45,8 @@ export default function ComponentShowcase({ onBack }: ComponentShowcaseProps) {
         >
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-5xl mb-2">Borderless Components</h1>
-              <p className="text-xl text-slate-600">无界组件库 · Fluid Technology Design System</p>
+              <h1 className="text-5xl mb-2">02 · Basic Components v0.2</h1>
+              <p className="text-xl text-slate-600">基础组件 · Fluid Technology Design System</p>
             </div>
             <motion.button
               className="px-6 py-3 rounded-xl bg-gradient-to-r from-slate-500 to-slate-600 text-white flex items-center gap-2"

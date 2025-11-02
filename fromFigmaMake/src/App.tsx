@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Droplet, Sparkles, Layers, Type, Palette, Grid3x3, Box, Package, Layers3, Sparkle, Waves, Layers2, Zap, Star } from "lucide-react";
+import { Droplet, Sparkles, Layers, Type, Palette, Grid3x3, Box, Package, Layers3, Sparkle, Waves, Layers2, Zap, Star, Target } from "lucide-react";
 import { useState } from "react";
 import ComponentShowcase from "./pages/ComponentShowcase";
 import BorderlessComparison from "./pages/BorderlessComparison";
@@ -8,9 +8,10 @@ import DynamicBorderlessDemo from "./pages/DynamicBorderlessDemo";
 import MultiLayerFeatherDemo from "./pages/MultiLayerFeatherDemo";
 import DynamicBorderlessDemoV5 from "./pages/DynamicBorderlessDemoV5";
 import DynamicBorderlessV6Perfect from "./pages/04-DynamicBorderlessV6-Perfect";
+import DynamicBorderlessV7Ultimate from "./pages/05-DynamicBorderlessV7-Ultimate";
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'foundation' | 'components' | 'comparison' | 'advanced' | 'dynamic' | 'multilayer' | 'v5' | 'v6'>('foundation');
+  const [currentPage, setCurrentPage] = useState<'foundation' | 'components' | 'comparison' | 'advanced' | 'dynamic' | 'multilayer' | 'v5' | 'v6' | 'v7'>('foundation');
 
   if (currentPage === 'components') {
     return <ComponentShowcase onBack={() => setCurrentPage('foundation')} />;
@@ -38,6 +39,10 @@ export default function App() {
 
   if (currentPage === 'v6') {
     return <DynamicBorderlessV6Perfect onBack={() => setCurrentPage('foundation')} />;
+  }
+
+  if (currentPage === 'v7') {
+    return <DynamicBorderlessV7Ultimate onBack={() => setCurrentPage('foundation')} />;
   }
 
   return (
@@ -131,20 +136,36 @@ export default function App() {
                 <span>03 v0.5</span>
               </motion.button>
               <motion.button
-                className="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-green-500 text-white flex items-center gap-2"
+                className="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-green-500 text-white flex items-center gap-2 opacity-70"
                 style={{
-                  boxShadow: '0 0 30px rgba(34,197,94,0.4), 0 0 60px rgba(34,197,94,0.2)'
+                  boxShadow: '0 0 20px rgba(34,197,94,0.3), 0 0 40px rgba(34,197,94,0.15)'
                 }}
                 whileHover={{
-                  boxShadow: '0 0 40px rgba(34,197,94,0.5), 0 0 80px rgba(34,197,94,0.3)',
+                  boxShadow: '0 0 30px rgba(34,197,94,0.4), 0 0 60px rgba(34,197,94,0.2)',
                   y: -2,
-                  scale: 1.05
+                  opacity: 0.9
                 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setCurrentPage('v6')}
               >
                 <Star className="w-5 h-5" />
-                <span>04 v0.6 ✓</span>
+                <span>04 v0.6</span>
+              </motion.button>
+              <motion.button
+                className="px-5 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-white flex items-center gap-2 relative"
+                style={{
+                  boxShadow: '0 0 40px rgba(251,191,36,0.5), 0 0 80px rgba(251,191,36,0.3)'
+                }}
+                whileHover={{
+                  boxShadow: '0 0 50px rgba(251,191,36,0.6), 0 0 100px rgba(251,191,36,0.4)',
+                  y: -2,
+                  scale: 1.05
+                }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setCurrentPage('v7')}
+              >
+                <Target className="w-5 h-5" />
+                <span>05 v0.7 ⭐</span>
               </motion.button>
               <motion.button
                 className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex items-center gap-2"

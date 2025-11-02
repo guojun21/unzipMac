@@ -22,14 +22,11 @@ export default function DynamicBorderlessV6Perfect({ onBack }: DynamicBorderless
         >
           <div className="flex items-center justify-between mb-4">
             <div>
-              <div className="flex items-center gap-3 mb-2">
+              <div className="mb-2">
                 <h1 className="text-5xl">Dynamic Borderless v0.6</h1>
-                <span className="px-4 py-1 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 text-white text-sm font-medium">
-                  ✓ PERFECT
-                </span>
               </div>
-              <p className="text-xl text-slate-600">完美版本 · All Issues Fixed</p>
-              <p className="text-lg text-emerald-600 mt-2">透明度固定 · SVG独立 · 强化模糊</p>
+              <p className="text-xl text-slate-600">探索：透明度固定、SVG独立、强化模糊</p>
+              <p className="text-sm text-slate-500 mt-2">Exploration: Fixed opacity, independent SVG layer, stronger backdrop blur</p>
             </div>
             {onBack && (
               <motion.button

@@ -27,14 +27,11 @@ export default function DynamicBorderlessV7Ultimate({ onBack }: DynamicBorderles
         >
           <div className="flex items-center justify-between mb-4">
             <div>
-              <div className="flex items-center gap-3 mb-2">
+              <div className="mb-2">
                 <h1 className="text-5xl">Dynamic Borderless v0.7</h1>
-                <span className="px-4 py-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-sm font-medium">
-                  ⭐ ULTIMATE
-                </span>
               </div>
-              <p className="text-xl text-slate-600">终极版本 · Constant Opacity Discovery</p>
-              <p className="text-lg text-amber-600 mt-2">透明度恒定1.0 · 仅模糊和光晕变化</p>
+              <p className="text-xl text-slate-600">探索：紫色透明度恒定1.0，凝结效果靠blur变化</p>
+              <p className="text-sm text-slate-500 mt-2">Exploration: Constant opacity (1.0), condensation via blur changes, adjustable parameters</p>
             </div>
             {onBack && (
               <motion.button

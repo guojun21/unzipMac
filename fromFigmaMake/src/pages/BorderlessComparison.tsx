@@ -17,8 +17,9 @@ export default function BorderlessComparison({ onBack }: BorderlessComparisonPro
         >
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-5xl mb-2">01 · Feather Intensity Study</h1>
-              <p className="text-xl text-slate-600">羽化强度研究 · Finding the Perfect Edge Softness</p>
+              <h1 className="text-5xl mb-2">Feather Intensity Study</h1>
+              <p className="text-xl text-slate-600">探索：4种不同羽化程度（保守/中度/重度/极致）</p>
+              <p className="text-sm text-slate-500 mt-1">Exploration: 4 feather levels (conservative/moderate/heavy/extreme)</p>
             </div>
             {onBack && (
               <motion.button

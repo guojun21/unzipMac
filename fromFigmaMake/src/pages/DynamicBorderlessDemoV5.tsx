@@ -21,14 +21,11 @@ export default function DynamicBorderlessDemoV5({ onBack }: DynamicBorderlessDem
         >
           <div className="flex items-center justify-between mb-4">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-5xl">03 · Dynamic Borderless v0.5</h1>
-                <span className="px-4 py-1 rounded-full bg-orange-100 text-orange-700 text-sm font-medium border border-orange-300">
-                  ⚠️ HAS ISSUES
-                </span>
+              <div className="mb-2">
+                <h1 className="text-5xl">Dynamic Borderless v0.5</h1>
               </div>
-              <p className="text-xl text-slate-600">问题版本 · See v0.6 for fixes</p>
-              <p className="text-lg text-orange-600 mt-2">此版本有3个关键问题 - 请查看 v0.6</p>
+              <p className="text-xl text-slate-600">探索：透明度变化的凝结效果</p>
+              <p className="text-sm text-slate-500 mt-2">Exploration: Condensation effect via opacity changes (0.35 → 1.0)</p>
             </div>
             {onBack && (
               <motion.button
@@ -47,23 +44,6 @@ export default function DynamicBorderlessDemoV5({ onBack }: DynamicBorderlessDem
                 <span>返回</span>
               </motion.button>
             )}
-          </div>
-          {/* Warning Banner */}
-          <div className="mt-6 p-6 rounded-xl bg-orange-50 border-2 border-orange-200">
-            <div className="flex items-start gap-3">
-              <span className="text-2xl">⚠️</span>
-              <div>
-                <h3 className="text-lg font-medium text-orange-900 mb-2">This version has 3 critical issues</h3>
-                <ul className="space-y-1 text-sm text-orange-700">
-                  <li>• ❌ Opacity changes between states (should stay fixed)</li>
-                  <li>• ❌ SVG icon affected by parent blur (should be independent)</li>
-                  <li>• ❌ Backdrop blur too weak (should be stronger)</li>
-                </ul>
-                <p className="mt-3 text-sm text-orange-800 font-medium">
-                  → All issues fixed in v0.6. Please use v0.6 for production.
-                </p>
-              </div>
-            </div>
           </div>
         </motion.div>
 

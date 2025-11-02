@@ -1,11 +1,14 @@
 import { motion } from "motion/react";
-import { Droplet, Sparkles, Layers, Type, Palette, Grid3x3, Box, Package, Layers3 } from "lucide-react";
+import { Droplet, Sparkles, Layers, Type, Palette, Grid3x3, Box, Package, Layers3, Sparkle, Waves, Layers2 } from "lucide-react";
 import { useState } from "react";
 import ComponentShowcase from "./pages/ComponentShowcase";
 import BorderlessComparison from "./pages/BorderlessComparison";
+import AdvancedFeatheringTechniques from "./pages/AdvancedFeatheringTechniques";
+import DynamicBorderlessDemo from "./pages/DynamicBorderlessDemo";
+import MultiLayerFeatherDemo from "./pages/MultiLayerFeatherDemo";
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'foundation' | 'components' | 'comparison'>('foundation');
+  const [currentPage, setCurrentPage] = useState<'foundation' | 'components' | 'comparison' | 'advanced' | 'dynamic' | 'multilayer'>('foundation');
 
   if (currentPage === 'components') {
     return <ComponentShowcase onBack={() => setCurrentPage('foundation')} />;
@@ -13,6 +16,18 @@ export default function App() {
 
   if (currentPage === 'comparison') {
     return <BorderlessComparison onBack={() => setCurrentPage('foundation')} />;
+  }
+
+  if (currentPage === 'advanced') {
+    return <AdvancedFeatheringTechniques onBack={() => setCurrentPage('foundation')} />;
+  }
+
+  if (currentPage === 'dynamic') {
+    return <DynamicBorderlessDemo onBack={() => setCurrentPage('foundation')} />;
+  }
+
+  if (currentPage === 'multilayer') {
+    return <MultiLayerFeatherDemo onBack={() => setCurrentPage('foundation')} />;
   }
 
   return (
@@ -29,9 +44,9 @@ export default function App() {
               <Droplet className="w-10 h-10 text-cyan-500" />
               <h1 className="text-5xl">Fluid Technology</h1>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-wrap">
               <motion.button
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-400 to-purple-500 text-white flex items-center gap-2"
+                className="px-5 py-3 rounded-xl bg-gradient-to-r from-purple-400 to-purple-500 text-white flex items-center gap-2"
                 style={{
                   boxShadow: '0 0 20px rgba(167,139,250,0.3), 0 0 40px rgba(167,139,250,0.15)'
                 }}
@@ -46,6 +61,51 @@ export default function App() {
                 <span>羽化研究</span>
               </motion.button>
               <motion.button
+                className="px-5 py-3 rounded-xl bg-gradient-to-r from-pink-400 to-purple-500 text-white flex items-center gap-2"
+                style={{
+                  boxShadow: '0 0 20px rgba(244,114,182,0.3), 0 0 40px rgba(244,114,182,0.15)'
+                }}
+                whileHover={{
+                  boxShadow: '0 0 30px rgba(244,114,182,0.4), 0 0 60px rgba(244,114,182,0.2)',
+                  y: -2
+                }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setCurrentPage('advanced')}
+              >
+                <Sparkle className="w-5 h-5" />
+                <span>高级技术</span>
+              </motion.button>
+              <motion.button
+                className="px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-cyan-600 text-white flex items-center gap-2"
+                style={{
+                  boxShadow: '0 0 20px rgba(34,211,238,0.3), 0 0 40px rgba(34,211,238,0.15)'
+                }}
+                whileHover={{
+                  boxShadow: '0 0 30px rgba(34,211,238,0.4), 0 0 60px rgba(34,211,238,0.2)',
+                  y: -2
+                }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setCurrentPage('dynamic')}
+              >
+                <Waves className="w-5 h-5" />
+                <span>动态无界</span>
+              </motion.button>
+              <motion.button
+                className="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-500 text-white flex items-center gap-2"
+                style={{
+                  boxShadow: '0 0 20px rgba(52,211,153,0.3), 0 0 40px rgba(52,211,153,0.15)'
+                }}
+                whileHover={{
+                  boxShadow: '0 0 30px rgba(52,211,153,0.4), 0 0 60px rgba(52,211,153,0.2)',
+                  y: -2
+                }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setCurrentPage('multilayer')}
+              >
+                <Layers2 className="w-5 h-5" />
+                <span>多层羽化</span>
+              </motion.button>
+              <motion.button
                 className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex items-center gap-2"
                 style={{
                   boxShadow: '0 0 20px rgba(6,182,212,0.3), 0 0 40px rgba(6,182,212,0.15)'
@@ -58,7 +118,7 @@ export default function App() {
                 onClick={() => setCurrentPage('components')}
               >
                 <Package className="w-5 h-5" />
-                <span>查看组件</span>
+                <span>查���组件</span>
               </motion.button>
             </div>
           </div>
@@ -344,7 +404,7 @@ export default function App() {
         <Section icon={Type} title="Minimal Text" subtitle="极简文字">
           <div className="flex flex-wrap gap-4">
             <FluidButton>上传</FluidButton>
-            <FluidButton variant="secondary">删除</FluidButton>
+            <FluidButton variant="secondary">��除</FluidButton>
             <FluidButton variant="success">开始</FluidButton>
             <FluidButton variant="warning">警告</FluidButton>
             <FluidButton variant="purple">特殊</FluidButton>

@@ -7,8 +7,9 @@ import DynamicBorderlessDemoV5 from "./pages/DynamicBorderlessDemoV5";
 import DynamicBorderlessV6 from "./pages/04-DynamicBorderlessV6-Perfect";
 import DynamicBorderlessV7 from "./pages/05-DynamicBorderlessV7-Ultimate";
 import DynamicBorderlessV7Fix from "./pages/07-DynamicBorderlessV7-SliderFix";
+import DynamicBorderlessV8 from "./pages/08-DynamicBorderlessV8-BlurredGlow";
 
-type PageType = '01' | '02' | '03' | '04' | '05' | '06' | '07';
+type PageType = '01' | '02' | '03' | '04' | '05' | '06' | '07' | '08';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<PageType | null>(null);
@@ -34,6 +35,9 @@ export default function App() {
   }
   if (currentPage === '07') {
     return <DynamicBorderlessV7Fix onBack={() => setCurrentPage(null)} />;
+  }
+  if (currentPage === '08') {
+    return <DynamicBorderlessV8 onBack={() => setCurrentPage(null)} />;
   }
 
   // Home page with navigation
@@ -115,6 +119,13 @@ export default function App() {
             >
               07 · v0.7 滑块修复
             </NavButton>
+
+            <NavButton 
+              color="indigo" 
+              onClick={() => setCurrentPage('08')}
+            >
+              08 · v0.8 光晕模糊
+            </NavButton>
           </div>
         </motion.div>
 
@@ -159,7 +170,7 @@ function NavButton({
   onClick, 
   children 
 }: { 
-  color: 'purple' | 'pink' | 'cyan' | 'emerald' | 'orange' | 'blue' | 'green';
+  color: 'purple' | 'pink' | 'cyan' | 'emerald' | 'orange' | 'blue' | 'green' | 'indigo';
   onClick: () => void;
   children: React.ReactNode;
 }) {
@@ -205,6 +216,12 @@ function NavButton({
       to: 'to-green-500', 
       glow: 'rgba(34,197,94,0.3)',
       glowLight: 'rgba(34,197,94,0.15)'
+    },
+    indigo: { 
+      from: 'from-indigo-400', 
+      to: 'to-indigo-500', 
+      glow: 'rgba(99,102,241,0.3)',
+      glowLight: 'rgba(99,102,241,0.15)'
     },
   };
   

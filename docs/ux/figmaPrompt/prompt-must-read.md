@@ -122,49 +122,91 @@
 
 ## 📝 Prompt模板（标准格式）
 
-### 每个prompt必须包含的部分
+### 每个prompt必须包含的部分（仅3部分）
 
 ```markdown
 # Prompt XX.XX: [描述性标题]
 
-**目标**: [明确的探索目标]
-**日期**: YYYY-MM-DD
-**版本**: vX.X (如果适用)
+**目标**: [本次探索的目的]  
+**日期**: YYYY-MM-DD  
 **文件**: XX-[PageName].tsx
 
 ---
 
-## 中文Prompt
+## 🎯 本次探索的方向
 
+[简短说明本次prompt要探索/修复的内容，2-3句话]
+
+---
+
+## 🎨 中文Prompt
+
+```
 [完整的中文prompt内容]
 
+导航位置：
+在 App.tsx 中添加为第X个按钮
+按钮文字: "XX · [描述]"
+按钮颜色: [color]-400 to [color]-500
+
+页面底部添加prompt记录：
+<details className="mt-16 p-6 rounded-xl bg-slate-900 text-white">
+  <summary>📝 查看生成此页面的Prompt</summary>
+  <div className="space-y-6">
+    <div>
+      <h4>Prompt (中文版)</h4>
+      <pre>[本prompt中文内容]</pre>
+    </div>
+    <div>
+      <h4>Prompt (English Version)</h4>
+      <pre>[本prompt英文内容]</pre>
+    </div>
+    <div>
+      <p>生成日期: YYYY-MM-DD</p>
+      <p>Prompt文件: prompt-XX.XX.md</p>
+      <p>探索方向: [说明]</p>
+    </div>
+  </div>
+</details>
+```
+
 ---
 
-## English Prompt  
+## 🎨 English Prompt
 
-[完整的英文prompt内容]
+```
+[Complete English prompt content]
+
+Navigation:
+Add to App.tsx as button #X
+Button text: "XX · [Description]"
+Button color: [color]-400 to [color]-500
+
+Bottom prompt display:
+<details className="mt-16 p-6 rounded-xl bg-slate-900 text-white">
+  <summary>📝 View Prompt</summary>
+  <div className="space-y-6">
+    <div>
+      <h4>Prompt (中文版)</h4>
+      <pre>[Chinese prompt]</pre>
+    </div>
+    <div>
+      <h4>Prompt (English Version)</h4>
+      <pre>[English prompt]</pre>
+    </div>
+    <div>
+      <p>Generated: YYYY-MM-DD</p>
+      <p>Prompt file: prompt-XX.XX.md</p>
+      <p>Exploration: [description]</p>
+    </div>
+  </div>
+</details>
+```
 
 ---
 
-## 导航位置
-
-ADD to App.tsx:
-- Position: [第X个按钮]
-- Button text: "XX · [描述]"
-- Button color: [颜色名]
-- File: [文件路径]
-
----
-
-## 预期结果
-
-[说明会生成什么]
-
----
-
-## 检查清单
-
-[验证要点]
+**仅需3部分：目的说明 + 中文Prompt + 英文Prompt**  
+**去掉：预期结果、检查清单等冗余内容**
 ```
 
 ---
@@ -587,28 +629,32 @@ function NavButton({ color, active, onClick, children }) {
 
 ---
 
-## 🔍 Prompt审查流程
+## 🔍 Prompt内容要求（精简）
 
-### 提交新prompt前
+### 必须包含（仅3部分）
 
 ```
-Step 1: 自查
-  □ 读一遍 prompt-must-read.md
-  □ 确认遵守所有原则
-  
-Step 2: 内容检查
-  □ 中英文prompt完整
-  □ 页面底部代码完整
-  □ 导航位置明确
-  
-Step 3: 措辞检查
-  □ 无绝对词
-  □ 使用探索性语言
-  □ 版本平等对待
-  
-Step 4: 提交
-  □ 文件名符合规范
-  □ 位置正确（figmaPrompt/）
+1. 本次探索的方向（2-3句话）
+   说明要探索/修复什么
+
+2. 中文Prompt（完整）
+   包含：技术实现 + 导航位置 + 底部prompt展示代码
+
+3. English Prompt（完整）
+   包含：技术实现 + 导航位置 + 底部prompt展示代码
+```
+
+### 禁止包含（冗余内容）
+
+```
+❌ 预期结果
+❌ 检查清单
+❌ 修复建议
+❌ 版本对比表
+❌ 成功标准
+❌ 其他啰嗦内容
+
+保持简洁！只要3部分！
 ```
 
 ---

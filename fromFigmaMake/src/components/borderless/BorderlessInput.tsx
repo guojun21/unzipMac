@@ -1,68 +1,135 @@
-import { motion } from "motion/react";
-import { Search } from "lucide-react";
-import { InputHTMLAttributes, useState } from "react";
+import { motion, useAnimation } from "motion/react";
+import { LucideIcon } from "lucide-react";
+import { useState, useEffect, CSSProperties, ChangeEvent } from "react";
 
-interface BorderlessInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
-  icon?: React.ReactNode;
-  containerClassName?: string;
+interface BorderlessInputProps {
+  placeholder?: string;
+  value?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  icon?: LucideIcon;
+  className?: string;
 }
 
+// ==================== V1.4: Component Library - Input ====================
+// Fixed optimal parameters
+// NEW: Condensed edge keeps 1px on focus
+// NEW: Press state effect
+
 export function BorderlessInput({
-  icon = <Search className="w-[18px] h-[18px]" />,
   placeholder = "搜索",
-  containerClassName = "",
+  value,
+  onChange,
+  icon: Icon,
   className = "",
-  ...props
 }: BorderlessInputProps) {
   const [isFocused, setIsFocused] = useState(false);
-
+  const [isPressed, setIsPressed] = useState(false);
+  const edgeControls = useAnimation();
+  
+  // Fixed parameters (moderate for inputs)
+  const params = {
+    edgeLineWidth: 5,
+    edgeBlurAmount: 10,
+    condensedEdgeWidth: 1,  // Keep 1px when focused
+    animationSpeed: 1000,
+  };
+  
+  // Edge line animation (triggered by focus, not hover)
+  useEffect(() => {
+    if (isFocused) {
+      edgeControls.start({
+        borderWidth: `${params.condensedEdgeWidth}px`,  // 5px → 1px
+        filter: 'blur(0px)',                            // 10px → 0px
+        borderColor: 'rgba(6,182,212,0.5)',
+        transition: { 
+          duration: params.animationSpeed / 1000, 
+          ease: [0.34, 1.56, 0.64, 1] 
+        }
+      });
+    } else {
+      edgeControls.start({
+        borderWidth: `${params.edgeLineWidth}px`,       // 1px → 5px
+        filter: `blur(${params.edgeBlurAmount}px)`,     // 0px → 10px
+        borderColor: 'rgba(6,182,212,0.6)',
+        transition: { 
+          duration: params.animationSpeed / 1000, 
+          ease: [0.34, 1.56, 0.64, 1] 
+        }
+      });
+    }
+  }, [isFocused, edgeControls]);
+  
   return (
-    <motion.div
-      className={`
-        relative w-80 h-12 rounded-lg
-        backdrop-blur-[10px]
-        flex items-center gap-3 px-4
-        ${containerClassName}
-      `}
-      style={{
-        background: 'rgba(255,255,255,0.7)',
-        boxShadow: isFocused
-          ? '0 0 0 2px rgba(6,182,212,0.2), 0 0 30px rgba(6,182,212,0.15)'
-          : '0 0 0 1px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.06)'
-      }}
-      animate={{
-        boxShadow: isFocused
-          ? '0 0 0 2px rgba(6,182,212,0.2), 0 0 30px rgba(6,182,212,0.15)'
-          : '0 0 0 1px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.06)'
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 25
-      }}
-    >
+    <div className={`relative ${className}`} style={{ padding: '20px', width: '320px' }}>
+      {/* Edge line */}
+      <motion.div
+        animate={edgeControls}
+        initial={{
+          borderWidth: `${params.edgeLineWidth}px`,
+          filter: `blur(${params.edgeBlurAmount}px)`,
+          borderColor: 'rgba(6,182,212,0.6)',
+        }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          border: `${params.edgeLineWidth}px solid rgba(6,182,212,0.6)`,
+          borderRadius: '12px',
+          boxSizing: 'border-box',
+          zIndex: 2,
+          pointerEvents: 'none',
+        }}
+      />
+      
+      {/* Input body */}
       <motion.div
         animate={{
-          color: isFocused ? 'rgb(6,182,212)' : 'rgb(148,163,184)'
+          // NEW: Press state - darken on click
+          filter: isPressed ? 'brightness(0.92)' : 'brightness(1)',
         }}
-        transition={{ duration: 0.2 }}
+        transition={{ 
+          duration: 0.15,  // 150ms fast response
+          ease: 'easeOut' 
+        }}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          padding: '12px 16px',
+          background: 'rgba(255,255,255,0.8)',
+          backdropFilter: 'blur(10px)',
+          borderRadius: '12px',
+          boxShadow: '0 0 10px 5px rgba(6,182,212,0.12)',
+          position: 'relative',
+          zIndex: 1,
+        } as CSSProperties}
+        onMouseDown={() => setIsPressed(true)}
+        onMouseUp={() => setIsPressed(false)}
+        onMouseLeave={() => setIsPressed(false)}
       >
-        {icon}
+        {Icon && (
+          <Icon 
+            size={18} 
+            style={{ color: '#94a3b8', flexShrink: 0 }} 
+          />
+        )}
+        <input
+          type="text"
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          style={{
+            border: 'none',
+            outline: 'none',
+            background: 'transparent',
+            fontSize: '14px',
+            color: '#0f172a',
+            flex: 1,
+            width: '100%',
+          }}
+        />
       </motion.div>
-      
-      <input
-        type="text"
-        placeholder={placeholder}
-        className={`
-          flex-1 bg-transparent outline-none
-          text-slate-900 placeholder:text-slate-400
-          text-sm
-          ${className}
-        `}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        {...props}
-      />
-    </motion.div>
+    </div>
   );
 }

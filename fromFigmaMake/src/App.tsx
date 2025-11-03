@@ -14,8 +14,10 @@ import DynamicBorderlessV1_1 from "./pages/11-DynamicBorderlessV1.1";
 import DynamicBorderlessV1_2 from "./pages/12-DynamicBorderlessV1.2";
 import DynamicBorderlessV1_3 from "./pages/13-DynamicBorderlessV1.3";
 import ComponentLibraryV1_4 from "./pages/14-ComponentLibraryV1.4";
+import ComponentLibraryV1_5 from "./pages/15-ComponentLibraryV1.5";
+import ComponentLibraryV1_6 from "./pages/16-ComponentLibraryV1.6";
 
-type PageType = '01' | '02' | '03' | '04' | '05' | '06' | '07' | '08' | '09' | '10' | '11' | '12' | '13' | '14';
+type PageType = '01' | '02' | '03' | '04' | '05' | '06' | '07' | '08' | '09' | '10' | '11' | '12' | '13' | '14' | '15' | '16';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<PageType | null>(null);
@@ -62,6 +64,12 @@ export default function App() {
   }
   if (currentPage === '14') {
     return <ComponentLibraryV1_4 onBack={() => setCurrentPage(null)} />;
+  }
+  if (currentPage === '15') {
+    return <ComponentLibraryV1_5 onBack={() => setCurrentPage(null)} />;
+  }
+  if (currentPage === '16') {
+    return <ComponentLibraryV1_6 onBack={() => setCurrentPage(null)} />;
   }
 
   // Home page with navigation
@@ -192,6 +200,20 @@ export default function App() {
             >
               14 · v1.4 组件库
             </NavButton>
+
+            <NavButton 
+              color="lime" 
+              onClick={() => setCurrentPage('15')}
+            >
+              15 · v1.5 组件修正
+            </NavButton>
+
+            <NavButton 
+              color="emerald" 
+              onClick={() => setCurrentPage('16')}
+            >
+              16 · v1.6 按钮简化
+            </NavButton>
           </div>
         </motion.div>
 
@@ -209,7 +231,7 @@ export default function App() {
           <ul className="space-y-2 text-slate-600">
             <li className="flex items-start gap-2">
               <span className="text-cyan-500">✓</span>
-              <span>所有版本都是探索过程的一步，平级展示</span>
+              <span>所有版本都是探索���程的一步，平级展示</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-cyan-500">✓</span>
@@ -236,7 +258,7 @@ function NavButton({
   onClick, 
   children 
 }: { 
-  color: 'purple' | 'pink' | 'cyan' | 'emerald' | 'orange' | 'blue' | 'green' | 'indigo' | 'rose' | 'amber' | 'teal' | 'violet' | 'fuchsia' | 'sky';
+  color: 'purple' | 'pink' | 'cyan' | 'emerald' | 'orange' | 'blue' | 'green' | 'indigo' | 'rose' | 'amber' | 'teal' | 'violet' | 'fuchsia' | 'sky' | 'lime';
   onClick: () => void;
   children: React.ReactNode;
 }) {
@@ -324,6 +346,12 @@ function NavButton({
       to: 'to-sky-500', 
       glow: 'rgba(56,189,248,0.3)',
       glowLight: 'rgba(56,189,248,0.15)'
+    },
+    lime: { 
+      from: 'from-lime-400', 
+      to: 'to-lime-500', 
+      glow: 'rgba(163,230,53,0.3)',
+      glowLight: 'rgba(163,230,53,0.15)'
     },
   };
   

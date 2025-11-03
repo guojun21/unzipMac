@@ -18,8 +18,9 @@ import ComponentLibraryV1_5 from "./pages/15-ComponentLibraryV1.5";
 import ComponentLibraryV1_6 from "./pages/16-ComponentLibraryV1.6";
 import ComponentLibraryV1_7 from "./pages/17-ComponentLibraryV1.7";
 import GlowingEdgeCardV1_8 from "./pages/18-GlowingEdgeCardV1.8";
+import CodePenGlowingEdgeV1_9 from "./pages/19-CodePenGlowingEdgeV1.9";
 
-type PageType = '01' | '02' | '03' | '04' | '05' | '06' | '07' | '08' | '09' | '10' | '11' | '12' | '13' | '14' | '15' | '16' | '17' | '18';
+type PageType = '01' | '02' | '03' | '04' | '05' | '06' | '07' | '08' | '09' | '10' | '11' | '12' | '13' | '14' | '15' | '16' | '17' | '18' | '19';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<PageType | null>(null);
@@ -78,6 +79,9 @@ export default function App() {
   }
   if (currentPage === '18') {
     return <GlowingEdgeCardV1_8 onBack={() => setCurrentPage(null)} />;
+  }
+  if (currentPage === '19') {
+    return <CodePenGlowingEdgeV1_9 onBack={() => setCurrentPage(null)} />;
   }
 
   // Home page with navigation
@@ -235,6 +239,13 @@ export default function App() {
               onClick={() => setCurrentPage('18')}
             >
               18 · v1.8 发光边缘
+            </NavButton>
+
+            <NavButton 
+              color="orange" 
+              onClick={() => setCurrentPage('19')}
+            >
+              19 · v1.9 CodePen复刻
             </NavButton>
           </div>
         </motion.div>

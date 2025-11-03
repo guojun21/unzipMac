@@ -21,8 +21,11 @@ import GlowingEdgeCardV1_8 from "./pages/18-GlowingEdgeCardV1.8";
 import CodePenGlowingEdgeV1_9 from "./pages/19-CodePenGlowingEdgeV1.9";
 import BorderlessCardV2_0 from "./pages/20-BorderlessCardV2.0";
 import GlowingButtonsV2_1 from "./pages/21-GlowingButtonsV2.1";
+import GlowingButtonsV2_2 from "./pages/22-GlowingButtonsV2.2";
+import PressScaleV2_3 from "./pages/23-PressScaleV2.3";
+import PressScaleV2_4 from "./pages/24-PressScaleV2.4";
 
-type PageType = '01' | '02' | '03' | '04' | '05' | '06' | '07' | '08' | '09' | '10' | '11' | '12' | '13' | '14' | '15' | '16' | '17' | '18' | '19' | '20' | '21';
+type PageType = '01' | '02' | '03' | '04' | '05' | '06' | '07' | '08' | '09' | '10' | '11' | '12' | '13' | '14' | '15' | '16' | '17' | '18' | '19' | '20' | '21' | '22' | '23' | '24';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<PageType | null>(null);
@@ -90,6 +93,15 @@ export default function App() {
   }
   if (currentPage === '21') {
     return <GlowingButtonsV2_1 onBack={() => setCurrentPage(null)} />;
+  }
+  if (currentPage === '22') {
+    return <GlowingButtonsV2_2 onBack={() => setCurrentPage(null)} />;
+  }
+  if (currentPage === '23') {
+    return <PressScaleV2_3 onBack={() => setCurrentPage(null)} />;
+  }
+  if (currentPage === '24') {
+    return <PressScaleV2_4 onBack={() => setCurrentPage(null)} />;
   }
 
   // Home page with navigation
@@ -268,6 +280,27 @@ export default function App() {
               onClick={() => setCurrentPage('21')}
             >
               21 · v2.1 发光按钮
+            </NavButton>
+
+            <NavButton 
+              color="lime" 
+              onClick={() => setCurrentPage('22')}
+            >
+              22 · v2.2 点击态修复
+            </NavButton>
+
+            <NavButton 
+              color="emerald" 
+              onClick={() => setCurrentPage('23')}
+            >
+              23 · v2.3 点击缩放
+            </NavButton>
+
+            <NavButton 
+              color="teal" 
+              onClick={() => setCurrentPage('24')}
+            >
+              24 · v2.4 浅色背景
             </NavButton>
           </div>
         </motion.div>

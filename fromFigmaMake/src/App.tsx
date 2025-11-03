@@ -10,8 +10,10 @@ import DynamicBorderlessV7Fix from "./pages/07-DynamicBorderlessV7-SliderFix";
 import DynamicBorderlessV8 from "./pages/08-DynamicBorderlessV8-BlurredGlow";
 import DynamicBorderlessV9 from "./pages/09-DynamicBorderlessV9-GlowFix";
 import DynamicBorderlessV1 from "./pages/10-DynamicBorderlessV1.0";
+import DynamicBorderlessV1_1 from "./pages/11-DynamicBorderlessV1.1";
+import DynamicBorderlessV1_2 from "./pages/12-DynamicBorderlessV1.2";
 
-type PageType = '01' | '02' | '03' | '04' | '05' | '06' | '07' | '08' | '09' | '10';
+type PageType = '01' | '02' | '03' | '04' | '05' | '06' | '07' | '08' | '09' | '10' | '11' | '12';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<PageType | null>(null);
@@ -46,6 +48,12 @@ export default function App() {
   }
   if (currentPage === '10') {
     return <DynamicBorderlessV1 onBack={() => setCurrentPage(null)} />;
+  }
+  if (currentPage === '11') {
+    return <DynamicBorderlessV1_1 onBack={() => setCurrentPage(null)} />;
+  }
+  if (currentPage === '12') {
+    return <DynamicBorderlessV1_2 onBack={() => setCurrentPage(null)} />;
   }
 
   // Home page with navigation
@@ -148,6 +156,20 @@ export default function App() {
             >
               10 · v1.0 光晕紧贴边缘 🎉
             </NavButton>
+
+            <NavButton 
+              color="teal" 
+              onClick={() => setCurrentPage('11')}
+            >
+              11 · v1.1 边缘线条模糊
+            </NavButton>
+
+            <NavButton 
+              color="violet" 
+              onClick={() => setCurrentPage('12')}
+            >
+              12 · v1.2 尺寸修正
+            </NavButton>
           </div>
         </motion.div>
 
@@ -192,7 +214,7 @@ function NavButton({
   onClick, 
   children 
 }: { 
-  color: 'purple' | 'pink' | 'cyan' | 'emerald' | 'orange' | 'blue' | 'green' | 'indigo' | 'rose' | 'amber';
+  color: 'purple' | 'pink' | 'cyan' | 'emerald' | 'orange' | 'blue' | 'green' | 'indigo' | 'rose' | 'amber' | 'teal' | 'violet';
   onClick: () => void;
   children: React.ReactNode;
 }) {
@@ -256,6 +278,18 @@ function NavButton({
       to: 'to-amber-500', 
       glow: 'rgba(251,191,36,0.3)',
       glowLight: 'rgba(251,191,36,0.15)'
+    },
+    teal: { 
+      from: 'from-teal-400', 
+      to: 'to-teal-500', 
+      glow: 'rgba(20,184,166,0.3)',
+      glowLight: 'rgba(20,184,166,0.15)'
+    },
+    violet: { 
+      from: 'from-violet-400', 
+      to: 'to-violet-500', 
+      glow: 'rgba(139,92,246,0.3)',
+      glowLight: 'rgba(139,92,246,0.15)'
     },
   };
   

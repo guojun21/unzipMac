@@ -20,8 +20,9 @@ import ComponentLibraryV1_7 from "./pages/17-ComponentLibraryV1.7";
 import GlowingEdgeCardV1_8 from "./pages/18-GlowingEdgeCardV1.8";
 import CodePenGlowingEdgeV1_9 from "./pages/19-CodePenGlowingEdgeV1.9";
 import BorderlessCardV2_0 from "./pages/20-BorderlessCardV2.0";
+import GlowingButtonsV2_1 from "./pages/21-GlowingButtonsV2.1";
 
-type PageType = '01' | '02' | '03' | '04' | '05' | '06' | '07' | '08' | '09' | '10' | '11' | '12' | '13' | '14' | '15' | '16' | '17' | '18' | '19' | '20';
+type PageType = '01' | '02' | '03' | '04' | '05' | '06' | '07' | '08' | '09' | '10' | '11' | '12' | '13' | '14' | '15' | '16' | '17' | '18' | '19' | '20' | '21';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<PageType | null>(null);
@@ -86,6 +87,9 @@ export default function App() {
   }
   if (currentPage === '20') {
     return <BorderlessCardV2_0 onBack={() => setCurrentPage(null)} />;
+  }
+  if (currentPage === '21') {
+    return <GlowingButtonsV2_1 onBack={() => setCurrentPage(null)} />;
   }
 
   // Home page with navigation
@@ -257,6 +261,13 @@ export default function App() {
               onClick={() => setCurrentPage('20')}
             >
               20 · v2.0 融合发光
+            </NavButton>
+
+            <NavButton 
+              color="fuchsia" 
+              onClick={() => setCurrentPage('21')}
+            >
+              21 · v2.1 发光按钮
             </NavButton>
           </div>
         </motion.div>

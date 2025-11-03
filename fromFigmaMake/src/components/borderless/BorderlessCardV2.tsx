@@ -1,0 +1,354 @@
+import { motion, useAnimation } from "motion/react";
+import { LucideIcon, FileArchive } from "lucide-react";
+import { useState, useEffect, useRef, CSSProperties } from "react";
+
+interface BorderlessCardV2Props {
+  title: string;
+  subtitle?: string;
+  icon?: LucideIcon;
+  iconColor?: { r: number; g: number; b: number };
+  onClick?: () => void;
+  className?: string;
+}
+
+// ==================== V2.0: Fusion of v1.7 Mist + v1.9 CodePen Glow ====================
+// Mist state: v1.7 blurred blue edge
+// Condensed state: v1.9 CodePen glowing edge (12-layer box-shadow + mesh gradient)
+
+export function BorderlessCardV2({
+  title,
+  subtitle,
+  icon: Icon = FileArchive,
+  iconColor = { r: 167, g: 139, b: 250 },
+  onClick,
+  className = "",
+}: BorderlessCardV2Props) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
+  const [pointerAngle, setPointerAngle] = useState(45);
+  const [pointerDistance, setPointerDistance] = useState(0);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const edgeControls = useAnimation();
+  const { r, g, b } = iconColor;
+  
+  // Fixed parameters
+  const params = {
+    edgeLineWidth: 7,
+    edgeBlurAmount: 12,
+    glowSpread: 13,
+    iconBackgroundBlur: 5.0,
+    animationSpeed: 1000,
+  };
+  
+  // Mouse tracking (exact v1.9 CodePen algorithm)
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!cardRef.current) return;
+    
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const dx = x - centerX;
+    const dy = y - centerY;
+    
+    // Angle calculation (v1.9 algorithm)
+    let angleRadians = 0;
+    let angleDegrees = 0;
+    if (dx !== 0 || dy !== 0) {
+      angleRadians = Math.atan2(dy, dx);
+      angleDegrees = angleRadians * (180 / Math.PI) + 90;
+      if (angleDegrees < 0) {
+        angleDegrees += 360;
+      }
+    }
+    
+    // Distance to edge calculation (v1.9 algorithm)
+    let k_x = Infinity;
+    let k_y = Infinity;
+    if (dx !== 0) {
+      k_x = centerX / Math.abs(dx);
+    }
+    if (dy !== 0) {
+      k_y = centerY / Math.abs(dy);
+    }
+    const closeness = Math.min(Math.max(1 / Math.min(k_x, k_y), 0), 1);
+    
+    setPointerAngle(angleDegrees);
+    setPointerDistance(closeness);
+  };
+  
+  // Glow intensity (based on distance) - v1.9 CodePen formula
+  const glowOpacity = Math.max(0, Math.min(1, (pointerDistance - 0.3) / 0.7));
+  const colorOpacity = Math.max(0, Math.min(1, (pointerDistance - 0.5) / 0.5));
+  
+  // Edge line animation (mist state from v1.7)
+  useEffect(() => {
+    if (isHovered) {
+      // Condensed state: edge shrinks and disappears
+      edgeControls.start({
+        borderWidth: '1px',
+        filter: 'blur(0px)',
+        opacity: 0,
+        transition: {
+          duration: params.animationSpeed / 1000,
+          ease: [0.34, 1.56, 0.64, 1],
+        }
+      });
+    } else {
+      // Mist state: edge expands and appears
+      edgeControls.start({
+        borderWidth: `${params.edgeLineWidth}px`,
+        filter: `blur(${params.edgeBlurAmount}px)`,
+        opacity: 1,
+        transition: {
+          duration: params.animationSpeed / 1000,
+          ease: [0.34, 1.56, 0.64, 1],
+        }
+      });
+    }
+  }, [isHovered, edgeControls, params.animationSpeed, params.edgeLineWidth, params.edgeBlurAmount]);
+  
+  return (
+    <div 
+      ref={cardRef}
+      className={`relative ${className}`}
+      style={{ 
+        width: '320px',
+        height: '240px',
+        cursor: onClick ? 'pointer' : 'default',
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setIsPressed(false);
+      }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      onPointerMove={handlePointerMove}
+      onClick={onClick}
+    >
+      {/* Layer 1: CodePen Mesh Gradient Border (condensed state) - exact v1.9 */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          borderRadius: '24px',
+          border: '1px solid transparent',
+          zIndex: 5,
+          opacity: isHovered ? colorOpacity : 0,
+          transition: 'opacity 0.25s ease-out',
+          pointerEvents: 'none',
+          // Exact v1.9 mesh gradient (8 radial layers)
+          background: `
+            linear-gradient(rgba(255,255,255,0.95) 0 100%) padding-box,
+            radial-gradient(at 80% 55%, hsla(268,100%,76%,1) 0px, transparent 50%) border-box,
+            radial-gradient(at 69% 34%, hsla(349,100%,74%,1) 0px, transparent 50%) border-box,
+            radial-gradient(at 8% 6%, hsla(136,100%,78%,1) 0px, transparent 50%) border-box,
+            radial-gradient(at 41% 38%, hsla(192,100%,64%,1) 0px, transparent 50%) border-box,
+            radial-gradient(at 86% 85%, hsla(186,100%,74%,1) 0px, transparent 50%) border-box,
+            radial-gradient(at 82% 18%, hsla(52,100%,65%,1) 0px, transparent 50%) border-box,
+            radial-gradient(at 51% 4%, hsla(12,100%,72%,1) 0px, transparent 50%) border-box,
+            linear-gradient(#c299ff 0 100%) border-box
+          `,
+          // Conic gradient mask following mouse angle (exact v1.9)
+          WebkitMaskImage: `
+            conic-gradient(
+              from ${pointerAngle}deg at center,
+              black 25%,
+              transparent 40%,
+              transparent 60%,
+              black 75%
+            )
+          `,
+          maskImage: `
+            conic-gradient(
+              from ${pointerAngle}deg at center,
+              black 25%,
+              transparent 40%,
+              transparent 60%,
+              black 75%
+            )
+          `,
+        }}
+      />
+      
+      {/* Layer 2: CodePen Glowing Edge (condensed state) - exact v1.9 */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: '-40px',  // Expand outward (v1.9)
+          borderRadius: '24px',
+          zIndex: 4,
+          opacity: isHovered ? glowOpacity : 0,
+          transition: 'opacity 0.25s ease-out',
+          pointerEvents: 'none',
+          mixBlendMode: 'plus-lighter',
+          // Conic gradient mask (narrow beam) - exact v1.9
+          WebkitMaskImage: `
+            conic-gradient(
+              from ${pointerAngle}deg at center,
+              black 2.5%,
+              transparent 10%,
+              transparent 90%,
+              black 97.5%
+            )
+          `,
+          maskImage: `
+            conic-gradient(
+              from ${pointerAngle}deg at center,
+              black 2.5%,
+              transparent 10%,
+              transparent 90%,
+              black 97.5%
+            )
+          `,
+        }}
+      >
+        {/* ::before - 12 layers of box-shadow (exact v1.9 CodePen) */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: '40px',  // Shrink back to original size
+            borderRadius: '24px',
+            // EXACT v1.9 CodePen box-shadow (6 inset + 6 outer)
+            boxShadow: `
+              inset 0 0 0 1px hsl(40deg 80% 80% / 100%),
+              inset 0 0 1px 0 hsl(40deg 80% 80% / 60%),
+              inset 0 0 3px 0 hsl(40deg 80% 80% / 50%),
+              inset 0 0 6px 0 hsl(40deg 80% 80% / 40%),
+              inset 0 0 15px 0 hsl(40deg 80% 80% / 30%),
+              inset 0 0 25px 2px hsl(40deg 80% 80% / 20%),
+              inset 0 0 50px 2px hsl(40deg 80% 80% / 10%),
+              
+              0 0 1px 0 hsl(40deg 80% 80% / 60%),
+              0 0 3px 0 hsl(40deg 80% 80% / 50%),
+              0 0 6px 0 hsl(40deg 80% 80% / 40%),
+              0 0 15px 0 hsl(40deg 80% 80% / 30%),
+              0 0 25px 2px hsl(40deg 80% 80% / 20%),
+              0 0 50px 2px hsl(40deg 80% 80% / 10%)
+            `,
+          }}
+        />
+      </div>
+      
+      {/* Layer 3: Blue blurred edge (mist state from v1.7) */}
+      <motion.div
+        animate={edgeControls}
+        initial={{
+          borderWidth: `${params.edgeLineWidth}px`,
+          filter: `blur(${params.edgeBlurAmount}px)`,
+          opacity: 1,
+        }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          border: `${params.edgeLineWidth}px solid rgba(6,182,212,0.8)`,
+          borderRadius: '24px',
+          boxSizing: 'border-box',
+          zIndex: 3,
+          pointerEvents: 'none',
+        }}
+      />
+      
+      {/* Layer 4: Main container + press state */}
+      <motion.div
+        animate={{
+          filter: isPressed ? 'brightness(1.15)' : 'brightness(1.0)',
+        }}
+        transition={{
+          duration: 0.2,
+          ease: 'easeOut',
+        }}
+        style={{
+          width: '320px',
+          height: '240px',
+          padding: '32px',
+          position: 'relative',
+          zIndex: 2,
+          boxSizing: 'border-box',
+          background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.65) 35%, rgba(255,255,255,0.3) 65%, rgba(255,255,255,0.1) 85%, rgba(255,255,255,0) 100%)',
+          backdropFilter: 'blur(32px)',
+          borderRadius: '24px',
+          boxShadow: `0 0 15px ${params.glowSpread}px rgba(6,182,212,0.25)`,
+          pointerEvents: 'none',
+        } as CSSProperties}
+      >
+        {/* Content: Icon + Text (same as v1.7) */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '16px',
+          height: '100%',
+          justifyContent: 'center',
+          pointerEvents: 'none',
+        }}>
+          
+          {/* Icon with colored background (double-layer from v1.7) */}
+          <div style={{ position: 'relative', width: '56px', height: '56px', pointerEvents: 'none' }}>
+            {/* Layer 1: Color background (can blur) */}
+            <motion.div
+              animate={{
+                filter: isHovered ? 'blur(0px)' : `blur(${params.iconBackgroundBlur}px)`,
+                boxShadow: isHovered 
+                  ? `0 0 20px rgba(${r},${g},${b},0.35)`
+                  : `0 0 30px rgba(${r},${g},${b},0.25)`,
+              }}
+              transition={{ 
+                duration: params.animationSpeed / 1000,
+                ease: [0.34, 1.56, 0.64, 1]
+              }}
+              style={{
+                width: '56px',
+                height: '56px',
+                borderRadius: '14px',
+                position: 'absolute',
+                background: `rgba(${r},${g},${b},1.0)`,
+                top: 0,
+                left: 0,
+                pointerEvents: 'none',
+              }}
+            />
+            
+            {/* Layer 2: White icon (always sharp) */}
+            <div style={{
+              width: '56px',
+              height: '56px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+              zIndex: 10,
+              pointerEvents: 'none',
+            }}>
+              {Icon && <Icon size={28} color="#ffffff" strokeWidth={2} />}
+            </div>
+          </div>
+          
+          {/* Text */}
+          <div style={{ textAlign: 'center', pointerEvents: 'none' }}>
+            <h3 style={{ 
+              fontSize: '20px', 
+              fontWeight: 600, 
+              color: '#0f172a', 
+              marginBottom: '4px',
+              lineHeight: 1.3,
+            }}>
+              {title}
+            </h3>
+            {subtitle && (
+              <p style={{ 
+                fontSize: '14px', 
+                color: '#64748b',
+                lineHeight: 1.5,
+              }}>
+                {subtitle}
+              </p>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}

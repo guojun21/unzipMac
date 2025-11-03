@@ -16,8 +16,10 @@ import DynamicBorderlessV1_3 from "./pages/13-DynamicBorderlessV1.3";
 import ComponentLibraryV1_4 from "./pages/14-ComponentLibraryV1.4";
 import ComponentLibraryV1_5 from "./pages/15-ComponentLibraryV1.5";
 import ComponentLibraryV1_6 from "./pages/16-ComponentLibraryV1.6";
+import ComponentLibraryV1_7 from "./pages/17-ComponentLibraryV1.7";
+import GlowingEdgeCardV1_8 from "./pages/18-GlowingEdgeCardV1.8";
 
-type PageType = '01' | '02' | '03' | '04' | '05' | '06' | '07' | '08' | '09' | '10' | '11' | '12' | '13' | '14' | '15' | '16';
+type PageType = '01' | '02' | '03' | '04' | '05' | '06' | '07' | '08' | '09' | '10' | '11' | '12' | '13' | '14' | '15' | '16' | '17' | '18';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<PageType | null>(null);
@@ -70,6 +72,12 @@ export default function App() {
   }
   if (currentPage === '16') {
     return <ComponentLibraryV1_6 onBack={() => setCurrentPage(null)} />;
+  }
+  if (currentPage === '17') {
+    return <ComponentLibraryV1_7 onBack={() => setCurrentPage(null)} />;
+  }
+  if (currentPage === '18') {
+    return <GlowingEdgeCardV1_8 onBack={() => setCurrentPage(null)} />;
   }
 
   // Home page with navigation
@@ -213,6 +221,20 @@ export default function App() {
               onClick={() => setCurrentPage('16')}
             >
               16 · v1.6 按钮简化
+            </NavButton>
+
+            <NavButton 
+              color="rose" 
+              onClick={() => setCurrentPage('17')}
+            >
+              17 · v1.7 按钮双层
+            </NavButton>
+
+            <NavButton 
+              color="pink" 
+              onClick={() => setCurrentPage('18')}
+            >
+              18 · v1.8 发光边缘
             </NavButton>
           </div>
         </motion.div>
